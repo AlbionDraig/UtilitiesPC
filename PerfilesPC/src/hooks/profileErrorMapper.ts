@@ -1,4 +1,30 @@
+interface BackendErrorPayload {
+  code: string
+  profileId?: string
+}
+
+function parseJsonErrorPayload(rawError: string): BackendErrorPayload | null {
+  try {
+    const parsed = JSON.parse(rawError) as Partial<BackendErrorPayload>
+    if (!parsed || typeof parsed.code !== 'string') {
+      return null
+    }
+
+    return {
+      code: parsed.code,
+      profileId: parsed.profileId,
+    }
+  } catch {
+    return null
+  }
+}
+
 export function getBackendErrorCode(rawError: string): string {
+  const payload = parseJsonErrorPayload(rawError)
+  if (payload) {
+    return payload.code.trim().toLowerCase()
+  }
+
   return rawError.split('|')[0]?.trim().toLowerCase() ?? 'unknown'
 }
 
@@ -14,6 +40,10 @@ export function mapApplyErrorToMessageKey(rawError: string): string {
   }
 
   if (backendCode === 'script_execution_failed') {
+    return 'app.messages.scriptExecutionFailed'
+  }
+
+  if (backendCode === 'script_resolution_failed') {
     return 'app.messages.scriptExecutionFailed'
   }
 

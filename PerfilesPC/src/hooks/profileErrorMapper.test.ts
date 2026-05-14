@@ -12,6 +12,17 @@ describe('getBackendErrorCode', () => {
     // Assert
     expect(code).toBe('profile_apply_failed')
   })
+
+  it('should extract backend code when error payload is json', () => {
+    // Arrange
+    const rawError = '{"code":"script_execution_failed","profileId":"gamer"}'
+
+    // Act
+    const code = getBackendErrorCode(rawError)
+
+    // Assert
+    expect(code).toBe('script_execution_failed')
+  })
 })
 
 describe('mapApplyErrorToMessageKey', () => {
@@ -46,5 +57,16 @@ describe('mapApplyErrorToMessageKey', () => {
 
     // Assert
     expect(messageKey).toBe('app.messages.applyError')
+  })
+
+  it('should map script resolution error when backend code is script_resolution_failed', () => {
+    // Arrange
+    const rawError = '{"code":"script_resolution_failed"}'
+
+    // Act
+    const messageKey = mapApplyErrorToMessageKey(rawError)
+
+    // Assert
+    expect(messageKey).toBe('app.messages.scriptExecutionFailed')
   })
 })
