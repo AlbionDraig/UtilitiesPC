@@ -2,7 +2,6 @@ export interface Profile {
   id: string
   name: string
   description: string
-  script: string
 }
 
 export interface AppStatus {

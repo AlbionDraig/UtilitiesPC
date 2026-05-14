@@ -43,10 +43,6 @@ export function mapApplyErrorToMessageKey(rawError: string): string {
     return 'app.messages.scriptExecutionFailed'
   }
 
-  if (backendCode === 'script_resolution_failed') {
-    return 'app.messages.scriptExecutionFailed'
-  }
-
   if (backendCode === 'profile_apply_failed') {
     return 'app.messages.profileApplyFailed'
   }

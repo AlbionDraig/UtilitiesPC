@@ -13,7 +13,7 @@ Herramienta de escritorio Tauri para seleccionar y aplicar perfiles de sistema o
 
 - **Frontend**: React 19 + TypeScript + Vite
 - **Backend**: Tauri 2 + Rust
-- **Scripts**: PowerShell 5.1
+- **Ejecución de perfiles**: Orquestación nativa en Rust (sin scripts externos)
 
 ## Requisitos previos
 
@@ -43,19 +43,11 @@ npm run tauri build
 ## Cómo funciona
 
 1. La interfaz gráfica muestra 4 perfiles disponibles
-2. Al seleccionar un perfil, se ejecuta el script PowerShell correspondiente
-3. Los scripts automatizan tareas como:
+2. Al seleccionar un perfil, el backend Rust ejecuta operaciones nativas de Windows
+3. El backend automatiza tareas como:
    - Cerrar procesos innecesarios
    - Optimizar recursos del sistema
    - Configurar ajustes específicos del perfil
-
-## Scripts disponibles
-
-- `scripts/profiles/perfil_gamer.ps1` - Cierra aplicaciones pesadas para gaming
-- `scripts/profiles/perfil_trabajo.ps1` - Configuración para trabajo general
-- `scripts/profiles/perfil_gamer_agresivo.ps1` - Máxima optimización para juegos
-- `scripts/profiles/perfil_trabajo_dev.ps1` - Ambiente para desarrollo
-- `scripts/profiles/profile_core.ps1` - Núcleo compartido con lógica reutilizable para aplicar perfiles
 
 ## Estructura del proyecto
 
@@ -70,7 +62,6 @@ PerfilesPC/
 │   │   ├── lib.rs           # Comandos Tauri
 │   │   └── main.rs          # Punto de entrada
 │   └── Cargo.toml
-├── scripts/profiles/        # Scripts PowerShell
 └── package.json
 ```
 
@@ -84,20 +75,14 @@ PerfilesPC/
 
 ### Agregar un nuevo perfil
 
-1. Crear nuevo script en `scripts/profiles/perfil_nuevo.ps1`
-2. Agregar entrada en `get_profiles()` en `src-tauri/src/lib.rs`
+1. Agregar entrada en catálogo de perfiles backend
+2. Implementar la lógica del nuevo perfil en el servicio de perfiles de Rust
 3. La UI se actualiza automáticamente
 
 ## Troubleshooting
 
-### Error: "Script not found"
-Asegurate que los scripts PowerShell están en `scripts/profiles/`
-
-### Error al ejecutar scripts
-Verifica que PowerShell ejecutable policy permite ejecutar scripts:
-```powershell
-Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope CurrentUser
-```
+### Error al aplicar perfiles
+Verifica que la app se ejecuta como administrador en Windows.
 
 ## Licencia
 

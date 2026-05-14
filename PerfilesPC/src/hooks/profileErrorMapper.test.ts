@@ -59,14 +59,14 @@ describe('mapApplyErrorToMessageKey', () => {
     expect(messageKey).toBe('app.messages.applyError')
   })
 
-  it('should map script resolution error when backend code is script_resolution_failed', () => {
+  it('should map profile apply failed payload when backend code is profile_apply_failed', () => {
     // Arrange
-    const rawError = '{"code":"script_resolution_failed"}'
+    const rawError = '{"code":"profile_apply_failed","profileId":"gamer"}'
 
     // Act
     const messageKey = mapApplyErrorToMessageKey(rawError)
 
     // Assert
-    expect(messageKey).toBe('app.messages.scriptExecutionFailed')
+    expect(messageKey).toBe('app.messages.profileApplyFailed')
   })
 })

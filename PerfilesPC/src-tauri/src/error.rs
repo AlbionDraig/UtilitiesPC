@@ -2,7 +2,6 @@
 pub enum AppError {
     AdminRequired,
     ProfileNotFound { profile_id: String },
-    ScriptResolutionFailed,
     ScriptExecutionFailed,
     ProfileApplyFailed { profile_id: String },
 }
@@ -20,7 +19,6 @@ impl AppError {
         match self {
             Self::AdminRequired => "admin_required",
             Self::ProfileNotFound { .. } => "profile_not_found",
-            Self::ScriptResolutionFailed => "script_resolution_failed",
             Self::ScriptExecutionFailed => "script_execution_failed",
             Self::ProfileApplyFailed { .. } => "profile_apply_failed",
         }

@@ -1,73 +1,162 @@
-use std::path::PathBuf;
 use std::process::Command;
-use tauri::Manager;
 
 use crate::error::AppError;
 use crate::models::{available_profiles, AppStatus, Profile};
 
+const BASE_GAMING_PROCESSES: [&str; 14] = [
+    "Docker Desktop",
+    "com.docker.backend",
+    "Docker Desktop Backend",
+    "Discord",
+    "Spotify",
+    "EpicGamesLauncher",
+    "Steam",
+    "Overwolf",
+    "CurseForge",
+    "LGHUB",
+    "NVIDIA Broadcast",
+    "msedge",
+    "opera",
+    "opera_gx",
+];
+
+const AGGRESSIVE_EXTRA_PROCESSES: [&str; 6] = [
+    "OneDrive",
+    "Teams",
+    "WhatsApp",
+    "Telegram",
+    "AdobeAcrobat",
+    "Creative Cloud",
+];
+
+fn stop_process_safely(image_name: &str) {
+    let candidates = if image_name.to_ascii_lowercase().ends_with(".exe") {
+        vec![image_name.to_string()]
+    } else {
+        vec![image_name.to_string(), format!("{}.exe", image_name)]
+    };
+
+    for candidate in candidates {
+        let _ = Command::new("taskkill")
+            .args(["/F", "/IM", candidate.as_str()])
+            .output();
+    }
+}
+
+fn stop_targets(process_names: &[&str]) {
+    for process_name in process_names {
+        stop_process_safely(process_name);
+    }
+}
+
+fn set_power_scheme(scheme: &str) -> Result<(), AppError> {
+    let output = Command::new("powercfg")
+        .args(["/setactive", scheme])
+        .output()
+        .map_err(|_| AppError::ScriptExecutionFailed)?;
+
+    if output.status.success() {
+        Ok(())
+    } else {
+        Err(AppError::ScriptExecutionFailed)
+    }
+}
+
+fn shutdown_wsl_if_available() {
+    if Command::new("where")
+        .arg("wsl")
+        .output()
+        .map(|out| out.status.success())
+        .unwrap_or(false)
+    {
+        let _ = Command::new("wsl").arg("--shutdown").output();
+    }
+}
+
+fn launch_app_if_exists(path: &str, args: &[&str]) {
+    if !std::path::Path::new(path).is_file() {
+        return;
+    }
+
+    let mut command = Command::new(path);
+    if !args.is_empty() {
+        command.args(args);
+    }
+
+    let _ = command.spawn();
+}
+
+fn launch_windows_terminal_if_available() {
+    if Command::new("where")
+        .arg("wt")
+        .output()
+        .map(|out| out.status.success())
+        .unwrap_or(false)
+    {
+        let _ = Command::new("wt").spawn();
+    }
+}
+
+fn apply_windows_profile(profile_id: &str) -> Result<(), AppError> {
+    match profile_id {
+        "gamer" => {
+            stop_targets(&BASE_GAMING_PROCESSES);
+            shutdown_wsl_if_available();
+            set_power_scheme("SCHEME_MIN")
+        }
+        "gamer_agresivo" => {
+            stop_targets(&BASE_GAMING_PROCESSES);
+            stop_targets(&AGGRESSIVE_EXTRA_PROCESSES);
+            shutdown_wsl_if_available();
+            set_power_scheme("SCHEME_MIN")
+        }
+        "trabajo" => {
+            set_power_scheme("SCHEME_BALANCED")?;
+
+            launch_app_if_exists("C:\\Program Files\\Docker\\Docker\\Docker Desktop.exe", &[]);
+
+            if let Ok(local_app_data) = std::env::var("LOCALAPPDATA") {
+                let discord_update = format!("{}\\Discord\\Update.exe", local_app_data);
+                launch_app_if_exists(&discord_update, &["--processStart", "Discord.exe"]);
+            }
+
+            Ok(())
+        }
+        "trabajo_dev" => {
+            set_power_scheme("SCHEME_BALANCED")?;
+
+            launch_app_if_exists("C:\\Program Files\\Docker\\Docker\\Docker Desktop.exe", &[]);
+
+            if let Ok(local_app_data) = std::env::var("LOCALAPPDATA") {
+                let discord_update = format!("{}\\Discord\\Update.exe", local_app_data);
+                launch_app_if_exists(&discord_update, &["--processStart", "Discord.exe"]);
+
+                let code_exe = format!("{}\\Programs\\Microsoft VS Code\\Code.exe", local_app_data);
+                launch_app_if_exists(&code_exe, &[]);
+            }
+
+            launch_windows_terminal_if_available();
+            Ok(())
+        }
+        _ => Err(AppError::ProfileNotFound {
+            profile_id: profile_id.to_string(),
+        }),
+    }
+}
+
 fn is_running_as_admin() -> bool {
     #[cfg(target_os = "windows")]
     {
-        let output = Command::new("powershell")
-            .arg("-NoProfile")
-            .arg("-Command")
-            .arg("[bool](([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator))")
-            .output();
-
-        if let Ok(result) = output {
-            return result.status.success()
-                && String::from_utf8_lossy(&result.stdout)
-                    .trim()
-                    .eq_ignore_ascii_case("true");
-        }
-
-        false
+        Command::new("net")
+            .arg("session")
+            .output()
+            .map(|result| result.status.success())
+            .unwrap_or(false)
     }
 
     #[cfg(not(target_os = "windows"))]
     {
         false
-    }
-}
-
-fn resolve_script_path(app: &tauri::AppHandle, script_name: &str) -> Result<PathBuf, AppError> {
-    let mut candidates: Vec<PathBuf> = Vec::new();
-
-    if let Ok(resource_dir) = app.path().resource_dir() {
-        candidates.push(resource_dir.join("scripts").join("profiles").join(script_name));
-    }
-
-    if let Ok(current_dir) = std::env::current_dir() {
-        candidates.push(current_dir.join("scripts").join("profiles").join(script_name));
-        candidates.push(
-            current_dir
-                .join("..")
-                .join("scripts")
-                .join("profiles")
-                .join(script_name),
-        );
-    }
-
-    for candidate in candidates {
-        if candidate.is_file() {
-            return Ok(candidate);
-        }
-    }
-
-    Err(AppError::ScriptResolutionFailed)
-}
-
-fn sanitize_stderr(stderr: &[u8]) -> String {
-    const MAX_LEN: usize = 320;
-    let raw = String::from_utf8_lossy(stderr)
-        .replace('\n', " ")
-        .replace('\r', " ");
-    let compact = raw.split_whitespace().collect::<Vec<_>>().join(" ");
-
-    if compact.len() > MAX_LEN {
-        format!("{}...", &compact[..MAX_LEN])
-    } else {
-        compact
     }
 }
 
@@ -90,7 +179,7 @@ pub fn get_profiles() -> Vec<Profile> {
     available_profiles()
 }
 
-pub fn apply_profile(app: &tauri::AppHandle, profile_id: &str) -> Result<String, AppError> {
+pub fn apply_profile(_app: &tauri::AppHandle, profile_id: &str) -> Result<String, AppError> {
     let status = get_app_status();
     if !status.can_apply_profiles {
         return Err(AppError::AdminRequired);
@@ -104,52 +193,34 @@ pub fn apply_profile(app: &tauri::AppHandle, profile_id: &str) -> Result<String,
             profile_id: profile_id.to_string(),
         })?;
 
-    let script_path = resolve_script_path(app, &profile.script)?;
-
     println!(
-        "profile_apply_start profile_id={} script={} platform={}",
+        "profile_apply_start profile_id={} mode=native platform={}",
         profile.id,
-        profile.script,
         std::env::consts::OS
     );
 
-    let output = Command::new("powershell")
-        .arg("-NoProfile")
-        .arg("-ExecutionPolicy")
-        .arg("Bypass")
-        .arg("-File")
-        .arg(&script_path)
-        .output()
-        .map_err(|_| AppError::ScriptExecutionFailed)?;
-
-    let exit_code = output.status.code().unwrap_or(-1);
-
-    if output.status.success() {
-        println!(
-            "profile_apply_success profile_id={} script={} exit_code={}",
-            profile.id, profile.script, exit_code
-        );
-        Ok(profile.id.clone())
-    } else {
-        let stderr = sanitize_stderr(&output.stderr);
-        eprintln!(
-            "profile_apply_error profile_id={} script={} exit_code={} stderr={}",
-            profile.id, profile.script, exit_code, stderr
-        );
-
-        Err(AppError::ProfileApplyFailed {
+    match apply_windows_profile(&profile.id) {
+        Ok(()) => {
+            println!(
+                "profile_apply_success profile_id={} mode=native",
+                profile.id
+            );
+            Ok(profile.id.clone())
+        }
+        Err(AppError::ScriptExecutionFailed) => Err(AppError::ProfileApplyFailed {
             profile_id: profile.id.clone(),
-        })
+        }),
+        Err(err) => Err(err),
     }
 }
 
 #[cfg(test)]
 mod tests {
-    use super::sanitize_stderr;
+    use super::apply_windows_profile;
 
     #[test]
-    fn should_compact_whitespace_when_sanitizing_stderr() {
-        let out = sanitize_stderr(b"line one\nline\ttwo\r\nline three");
-        assert_eq!(out, "line one line two line three");
+    fn should_return_profile_not_found_when_native_profile_is_unknown() {
+        let result = apply_windows_profile("unknown");
+        assert!(result.is_err());
     }
 }

@@ -3,7 +3,6 @@ pub struct Profile {
     pub id: String,
     pub name: String,
     pub description: String,
-    pub script: String,
 }
 
 #[derive(serde::Serialize, Clone, Debug)]
@@ -19,7 +18,6 @@ struct ProfileSeed {
     id: &'static str,
     name: &'static str,
     description: &'static str,
-    script: &'static str,
 }
 
 const PROFILE_SEEDS: [ProfileSeed; 4] = [
@@ -27,25 +25,21 @@ const PROFILE_SEEDS: [ProfileSeed; 4] = [
         id: "gamer",
         name: "Gamer",
         description: "Optimizado para juegos",
-        script: "perfil_gamer.ps1",
     },
     ProfileSeed {
         id: "trabajo",
         name: "Trabajo",
         description: "Perfil productivo estándar",
-        script: "perfil_trabajo.ps1",
     },
     ProfileSeed {
         id: "gamer_agresivo",
         name: "Gamer Agresivo",
         description: "Máximo rendimiento para gaming extremo",
-        script: "perfil_gamer_agresivo.ps1",
     },
     ProfileSeed {
         id: "trabajo_dev",
         name: "Trabajo Dev",
         description: "Optimizado para desarrollo",
-        script: "perfil_trabajo_dev.ps1",
     },
 ];
 
@@ -56,7 +50,6 @@ pub fn available_profiles() -> Vec<Profile> {
             id: seed.id.to_string(),
             name: seed.name.to_string(),
             description: seed.description.to_string(),
-            script: seed.script.to_string(),
         })
         .collect()
 }

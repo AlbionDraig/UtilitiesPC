@@ -9,25 +9,21 @@ const fallbackProfiles: Profile[] = [
     id: 'gamer',
     name: 'Gamer',
     description: 'Optimizado para juegos',
-    script: 'perfil_gamer.ps1',
   },
   {
     id: 'trabajo',
     name: 'Trabajo',
     description: 'Perfil productivo estandar',
-    script: 'perfil_trabajo.ps1',
   },
   {
     id: 'gamer_agresivo',
     name: 'Gamer Agresivo',
     description: 'Maximo rendimiento para gaming extremo',
-    script: 'perfil_gamer_agresivo.ps1',
   },
   {
     id: 'trabajo_dev',
     name: 'Trabajo Dev',
     description: 'Optimizado para desarrollo',
-    script: 'perfil_trabajo_dev.ps1',
   },
 ]
 
