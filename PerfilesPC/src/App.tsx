@@ -9,6 +9,13 @@ interface Profile {
   script: string
 }
 
+interface AppStatus {
+  platform: string
+  isAdmin: boolean
+  canApplyProfiles: boolean
+  reason: string | null
+}
+
 type Locale = 'es' | 'en'
 
 interface LocalizedProfileContent {
@@ -68,6 +75,9 @@ const uiText = {
     subtitle: 'Selecciona un perfil para optimizar tu sistema',
     browserInfo:
       'Modo navegador: la aplicacion muestra perfiles, pero solo puede aplicarlos dentro de la app de escritorio Tauri.',
+    desktopStatusReady: 'App desktop detectada. Puedes aplicar perfiles.',
+    desktopStatusBlocked: 'App desktop sin permisos suficientes.',
+    adminRequired: 'Ejecuta la aplicacion como administrador para aplicar perfiles.',
     loadErrorPrefix: 'Error al cargar perfiles:',
     applyErrorPrefix: 'Error:',
     applyLoading: 'Aplicando...',
@@ -84,12 +94,19 @@ const uiText = {
     fallbackTarget: 'Uso general',
     fallbackIndicator: 'Configuracion no detallada en frontend',
     profileIndicatorsLabel: 'Indicadores del perfil',
+    runtime: 'Entorno',
+    permissions: 'Permisos',
+    permissionsAdmin: 'Administrador',
+    permissionsUser: 'Usuario estandar',
   },
   en: {
     title: 'PC Profile Manager',
     subtitle: 'Select a profile to optimize your system',
     browserInfo:
       'Browser mode: profiles are visible, but they can only be applied inside the Tauri desktop app.',
+    desktopStatusReady: 'Desktop app detected. You can apply profiles.',
+    desktopStatusBlocked: 'Desktop app is running without required permissions.',
+    adminRequired: 'Run the app as administrator to apply profiles.',
     loadErrorPrefix: 'Error loading profiles:',
     applyErrorPrefix: 'Error:',
     applyLoading: 'Applying...',
@@ -106,6 +123,10 @@ const uiText = {
     fallbackTarget: 'General usage',
     fallbackIndicator: 'Configuration details are not available in frontend',
     profileIndicatorsLabel: 'Profile indicators',
+    runtime: 'Runtime',
+    permissions: 'Permissions',
+    permissionsAdmin: 'Administrator',
+    permissionsUser: 'Standard user',
   },
 } as const
 
@@ -219,6 +240,8 @@ function App() {
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
   const [info, setInfo] = useState<string | null>(null)
+  const [warning, setWarning] = useState<string | null>(null)
+  const [appStatus, setAppStatus] = useState<AppStatus | null>(null)
   const tauriRuntime = isTauriRuntime()
   const t = uiText[locale]
 
@@ -245,13 +268,24 @@ function App() {
   }
 
   const loadProfiles = useCallback(async () => {
+    setWarning(null)
+
     if (!tauriRuntime) {
       setProfiles(fallbackProfiles)
       setInfo(uiText[locale].browserInfo)
+      setAppStatus(null)
       return
     }
 
     try {
+      const status = await invoke<AppStatus>('get_app_status')
+      setAppStatus(status)
+      setInfo(status.canApplyProfiles ? uiText[locale].desktopStatusReady : uiText[locale].desktopStatusBlocked)
+
+      if (!status.canApplyProfiles) {
+        setWarning(status.reason ?? uiText[locale].adminRequired)
+      }
+
       const profilesList = await invoke<Profile[]>('get_profiles')
       setProfiles(profilesList)
     } catch (err) {
@@ -264,6 +298,11 @@ function App() {
   }, [loadProfiles])
 
   const applyProfile = async (profileId: string) => {
+    if (!tauriRuntime || !appStatus?.canApplyProfiles) {
+      setError(t.adminRequired)
+      return
+    }
+
     setLoading(true)
     setError(null)
     setSuccess(null)
@@ -307,8 +346,21 @@ function App() {
       </header>
 
       {info && <div className="alert alert-info">{info}</div>}
+      {warning && <div className="alert alert-warning">{warning}</div>}
       {error && <div className="alert alert-error">{error}</div>}
       {success && <div className="alert alert-success">{success}</div>}
+
+      {tauriRuntime && appStatus && (
+        <div className="runtime-status">
+          <span className="meta-pill">
+            {t.runtime}: {appStatus.platform}
+          </span>
+          <span className="meta-pill">
+            {t.permissions}:{' '}
+            {appStatus.isAdmin ? t.permissionsAdmin : t.permissionsUser}
+          </span>
+        </div>
+      )}
 
       <main className="profiles-grid">
         {profiles.map((profile) => {
@@ -336,16 +388,22 @@ function App() {
 
               <ul className="profile-indicators" aria-label={`${t.profileIndicatorsLabel} ${profile.name}`}>
                 {localized.indicators.map((indicator) => (
-                <li key={indicator}>{indicator}</li>
-              ))}
+                  <li key={indicator}>{indicator}</li>
+                ))}
               </ul>
 
               <button
                 onClick={() => applyProfile(profile.id)}
-                disabled={loading || !tauriRuntime}
+                disabled={loading || !tauriRuntime || !appStatus?.canApplyProfiles}
                 className="profile-button"
               >
-                {loading ? t.applyLoading : tauriRuntime ? t.applyButton : t.desktopOnly}
+                {loading
+                  ? t.applyLoading
+                  : !tauriRuntime
+                    ? t.desktopOnly
+                    : appStatus?.canApplyProfiles
+                      ? t.applyButton
+                      : t.adminRequired}
               </button>
             </div>
           )
