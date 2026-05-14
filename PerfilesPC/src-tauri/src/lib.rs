@@ -1,4 +1,5 @@
 use std::process::Command;
+use tauri::Manager;
 
 // Estructura para los perfiles disponibles
 #[derive(serde::Serialize, serde::Deserialize, Clone, Debug)]
@@ -42,17 +43,24 @@ fn get_profiles() -> Vec<Profile> {
 
 // Aplicar un perfil ejecutando su script PowerShell
 #[tauri::command]
-fn apply_profile(profile_id: &str) -> Result<String, String> {
+fn apply_profile(app: tauri::AppHandle, profile_id: &str) -> Result<String, String> {
     let profiles = get_profiles();
     let profile = profiles
         .iter()
         .find(|p| p.id == profile_id)
         .ok_or_else(|| format!("Perfil '{}' no encontrado", profile_id))?;
 
-    // Ruta al script (relativa a la carpeta de recursos)
-    let script_path = format!("./scripts/profiles/{}", profile.script);
+    // Resuelve la ruta usando el directorio de recursos de Tauri (funciona en dev y producción)
+    let resource_dir = app
+        .path()
+        .resource_dir()
+        .map_err(|e| format!("No se pudo resolver el directorio de recursos: {}", e))?;
+    let script_path = resource_dir
+        .join("scripts")
+        .join("profiles")
+        .join(&profile.script);
 
-    // Ejecutar script PowerShell
+    // Ejecutar script PowerShell con argumentos parametrizados (sin concatenación de strings)
     let output = Command::new("powershell")
         .arg("-NoProfile")
         .arg("-ExecutionPolicy")
@@ -68,6 +76,15 @@ fn apply_profile(profile_id: &str) -> Result<String, String> {
         let stderr = String::from_utf8_lossy(&output.stderr);
         Err(format!("Error al aplicar perfil: {}", stderr))
     }
+}
+
+#[cfg_attr(mobile, tauri::mobile_entry_point)]
+pub fn run() {
+    tauri::Builder::default()
+        .plugin(tauri_plugin_opener::init())
+        .invoke_handler(tauri::generate_handler![get_profiles, apply_profile])
+        .run(tauri::generate_context!())
+        .expect("error while running tauri application");
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
