@@ -9,6 +9,7 @@
         "lint": "eslint .",
                     "test":  "vitest run",
                     "test:watch":  "vitest",
+                    "test:i18n": "vitest run src/i18n/locales/resources.test.ts",
         "preview": "vite preview",
         "tauri": "tauri"
     },

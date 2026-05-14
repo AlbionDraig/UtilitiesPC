@@ -1,6 +1,36 @@
 import { describe, expect, it } from 'vitest'
 import { resources } from './resources'
 
+function collectSchemaPaths(value: unknown, prefix = ''): string[] {
+  if (Array.isArray(value)) {
+    const ownPath = prefix ? [prefix] : []
+
+    if (value.length === 0) {
+      return ownPath
+    }
+
+    const itemPaths = value.flatMap((item) => collectSchemaPaths(item, `${prefix}[*]`))
+    return [...ownPath, ...itemPaths]
+  }
+
+  if (value !== null && typeof value === 'object') {
+    const ownPath = prefix ? [prefix] : []
+    const entries = Object.entries(value as Record<string, unknown>)
+    const nested = entries.flatMap(([key, nestedValue]) => {
+      const nextPrefix = prefix ? `${prefix}.${key}` : key
+      return collectSchemaPaths(nestedValue, nextPrefix)
+    })
+
+    return [...ownPath, ...nested]
+  }
+
+  return prefix ? [prefix] : []
+}
+
+function sortedUnique(values: string[]): string[] {
+  return [...new Set(values)].sort()
+}
+
 describe('resources locales', () => {
   it('should include app title in both locales when resources are initialized', () => {
     // Arrange
@@ -36,5 +66,17 @@ describe('resources locales', () => {
 
     // Assert
     expect(bothIncludeMessage).toBe(true)
+  })
+
+  it('should preserve equivalent translation schema when comparing spanish and english resources', () => {
+    // Arrange
+    const spanishSchema = sortedUnique(collectSchemaPaths(resources.es.translation))
+    const englishSchema = sortedUnique(collectSchemaPaths(resources.en.translation))
+
+    // Act
+    const hasEquivalentSchema = JSON.stringify(spanishSchema) === JSON.stringify(englishSchema)
+
+    // Assert
+    expect(hasEquivalentSchema).toBe(true)
   })
 })
