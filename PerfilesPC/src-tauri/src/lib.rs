@@ -1,5 +1,3 @@
-use tauri::State;
-use std::path::PathBuf;
 use std::process::Command;
 
 // Estructura para los perfiles disponibles

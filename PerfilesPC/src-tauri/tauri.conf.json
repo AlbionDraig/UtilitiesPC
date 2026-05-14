@@ -4,7 +4,9 @@
   "version": "0.1.0",
   "identifier": "com.sebas.perfiles-pc",
   "build": {
-    "frontendDist": "../src"
+    "beforeDevCommand": "npm run dev",
+    "devUrl": "http://localhost:5173",
+    "frontendDist": "../dist"
   },
   "app": {
     "withGlobalTauri": true,
