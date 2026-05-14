@@ -1,8 +1,11 @@
 import { useCallback, useEffect, useState } from 'react'
 import { getProfileAppConfig, saveProfileAppConfig } from '../api/config'
+import { isTauriRuntime } from '../api/profiles'
+import { DEFAULT_CONFIG } from '../constants/defaultConfig'
 import type { AppRule, FullConfig } from '../types/config'
 
 export function useAdminPanel() {
+  const tauriRuntime = isTauriRuntime()
   const [config, setConfig] = useState<FullConfig | null>(null)
   const [saving, setSaving] = useState(false)
   const [saveError, setSaveError] = useState<string | null>(null)
@@ -10,10 +13,14 @@ export function useAdminPanel() {
   const [dirty, setDirty] = useState(false)
 
   useEffect(() => {
+    if (!tauriRuntime) {
+      setConfig(DEFAULT_CONFIG)
+      return
+    }
     getProfileAppConfig()
       .then(setConfig)
-      .catch(() => setConfig({ profiles: {} }))
-  }, [])
+      .catch(() => setConfig(DEFAULT_CONFIG))
+  }, [tauriRuntime])
 
   const addRule = useCallback((profileId: string, rule: AppRule) => {
     setConfig((prev) => {
@@ -47,6 +54,10 @@ export function useAdminPanel() {
 
   const save = useCallback(async () => {
     if (!config) return
+    if (!tauriRuntime) {
+      setSaveError('El guardado solo está disponible en la app de escritorio.')
+      return
+    }
     setSaving(true)
     setSaveError(null)
     try {

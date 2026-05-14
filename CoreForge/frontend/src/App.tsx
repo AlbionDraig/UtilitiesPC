@@ -52,23 +52,21 @@ function App() {
 
   return (
     <div className="app-container">
-      {showAdmin && tauriRuntime && (
+      {showAdmin && (
         <AdminPanel profiles={profiles} onClose={() => setShowAdmin(false)} />
       )}
       <header className="app-header">
         <div className="header-toolbar">
           <h1>⚙️ {t('app.title')}</h1>
           <div className="header-toolbar-right">
-            {tauriRuntime && (
-              <button
-                type="button"
-                className="admin-trigger-button"
-                onClick={() => setShowAdmin(true)}
-                title={t('admin.title')}
-              >
-                ☰ {t('admin.title')}
-              </button>
-            )}
+            <button
+              type="button"
+              className="admin-trigger-button"
+              onClick={() => setShowAdmin(true)}
+              title={t('admin.title')}
+            >
+              ☰ {t('admin.title')}
+            </button>
             <div className="locale-switch" role="group" aria-label={t('app.languageSelector')}>
             <button
               type="button"
