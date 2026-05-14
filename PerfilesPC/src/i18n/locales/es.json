@@ -12,6 +12,10 @@
       "desktopStatusReady": "App desktop detectada. Puedes aplicar perfiles.",
       "desktopStatusBlocked": "App desktop sin permisos suficientes.",
       "adminRequired": "Ejecuta la aplicacion como administrador para aplicar perfiles.",
+      "applySuccess": "Perfil {{profileName}} aplicado correctamente.",
+      "profileNotFound": "No se encontro el perfil solicitado.",
+      "scriptExecutionFailed": "No se pudo ejecutar el script del perfil.",
+      "profileApplyFailed": "El perfil fallo durante su aplicacion.",
       "loadError": "Error al cargar perfiles: {{details}}",
       "applyError": "Error: {{details}}"
     }

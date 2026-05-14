@@ -98,7 +98,7 @@ fn get_app_status() -> AppStatus {
         reason: if is_admin {
             None
         } else {
-            Some("La app requiere permisos de administrador para aplicar perfiles".to_string())
+            Some("admin_required".to_string())
         },
     }
 }
@@ -139,16 +139,16 @@ fn get_profiles() -> Vec<Profile> {
 fn apply_profile(app: tauri::AppHandle, profile_id: &str) -> Result<String, String> {
     let status = get_app_status();
     if !status.can_apply_profiles {
-        return Err(status.reason.unwrap_or_else(|| {
-            "No se pudo aplicar el perfil por permisos insuficientes".to_string()
-        }));
+        return Err(status
+            .reason
+            .unwrap_or_else(|| "admin_required".to_string()));
     }
 
     let profiles = get_profiles();
     let profile = profiles
         .iter()
         .find(|p| p.id == profile_id)
-        .ok_or_else(|| format!("Perfil '{}' no encontrado", profile_id))?;
+        .ok_or_else(|| format!("profile_not_found|{}", profile_id))?;
 
     let script_path = resolve_script_path(&app, &profile.script)?;
 
@@ -167,7 +167,7 @@ fn apply_profile(app: tauri::AppHandle, profile_id: &str) -> Result<String, Stri
         .arg("-File")
         .arg(&script_path)
         .output()
-        .map_err(|e| format!("Error al ejecutar script: {}", e))?;
+        .map_err(|e| format!("script_execution_failed|{}", e))?;
 
     let exit_code = output.status.code().unwrap_or(-1);
 
@@ -176,7 +176,7 @@ fn apply_profile(app: tauri::AppHandle, profile_id: &str) -> Result<String, Stri
             "profile_apply_success profile_id={} script={} exit_code={}",
             profile.id, profile.script, exit_code
         );
-        Ok(format!("Perfil '{}' aplicado correctamente", profile.name))
+        Ok(profile.id.clone())
     } else {
         let stderr = sanitize_stderr(&output.stderr);
         eprintln!(
@@ -184,8 +184,8 @@ fn apply_profile(app: tauri::AppHandle, profile_id: &str) -> Result<String, Stri
             profile.id, profile.script, exit_code, stderr
         );
         Err(format!(
-            "Error al aplicar perfil '{}'. Codigo {}. Detalle: {}",
-            profile.name, exit_code, stderr
+            "profile_apply_failed|{}|{}|{}",
+            profile.id, exit_code, stderr
         ))
     }
 }

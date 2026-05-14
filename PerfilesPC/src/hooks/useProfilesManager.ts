@@ -42,6 +42,10 @@ interface UseProfilesManagerResult {
   onApplyProfile: (profileId: string) => Promise<void>
 }
 
+function getBackendErrorCode(rawError: string): string {
+  return rawError.split('|')[0]?.trim().toLowerCase() ?? 'unknown'
+}
+
 export function useProfilesManager(): UseProfilesManagerResult {
   const { t } = useTranslation()
   const tauriRuntime = isTauriRuntime()
@@ -75,7 +79,12 @@ export function useProfilesManager(): UseProfilesManagerResult {
       )
 
       if (!status.canApplyProfiles) {
-        setWarning(status.reason ?? t('app.messages.adminRequired'))
+        const reasonCode = status.reason?.toLowerCase()
+        setWarning(
+          reasonCode === 'admin_required'
+            ? t('app.messages.adminRequired')
+            : t('app.messages.desktopStatusBlocked'),
+        )
       }
 
       const profilesList = await fetchProfiles()
@@ -100,11 +109,35 @@ export function useProfilesManager(): UseProfilesManagerResult {
     setSuccess(null)
 
     try {
-      const message = await applyProfile(profileId)
-      setSuccess(message)
+      const appliedProfileId = await applyProfile(profileId)
+      const profileName = t(`profile.names.${appliedProfileId}`, { defaultValue: profileId })
+      setSuccess(t('app.messages.applySuccess', { profileName }))
       setTimeout(() => setSuccess(null), 5000)
     } catch (err) {
-      setError(t('app.messages.applyError', { details: String(err) }))
+      const details = String(err)
+      const backendCode = getBackendErrorCode(details)
+
+      if (backendCode === 'admin_required') {
+        setError(t('app.messages.adminRequired'))
+        return
+      }
+
+      if (backendCode === 'profile_not_found') {
+        setError(t('app.messages.profileNotFound'))
+        return
+      }
+
+      if (backendCode === 'script_execution_failed') {
+        setError(t('app.messages.scriptExecutionFailed'))
+        return
+      }
+
+      if (backendCode === 'profile_apply_failed') {
+        setError(t('app.messages.profileApplyFailed'))
+        return
+      }
+
+      setError(t('app.messages.applyError', { details }))
     } finally {
       setLoadingProfileId(null)
     }
