@@ -1,0 +1,21 @@
+{
+  "title": "PC Profile Manager",
+  "subtitle": "Select a profile to optimize your system",
+  "runtime": "Runtime",
+  "permissions": "Permissions",
+  "permissionsAdmin": "Administrator",
+  "permissionsUser": "Standard user",
+  "languageSelector": "Language selector",
+  "messages": {
+    "browserInfo": "Browser mode: profiles are visible, but they can only be applied inside the Tauri desktop app.",
+    "desktopStatusReady": "Desktop app detected. You can apply profiles.",
+    "desktopStatusBlocked": "Desktop app is running without required permissions.",
+    "adminRequired": "Run the app as administrator to apply profiles.",
+    "applySuccess": "Profile {{profileName}} applied successfully.",
+    "profileNotFound": "The requested profile was not found.",
+    "scriptExecutionFailed": "The profile script could not be executed.",
+    "profileApplyFailed": "The profile failed while being applied.",
+    "loadError": "Error loading profiles: {{details}}",
+    "applyError": "Error: {{details}}"
+  }
+}

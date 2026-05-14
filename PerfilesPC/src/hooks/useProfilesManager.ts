@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { applyProfile, fetchAppStatus, fetchProfiles, isTauriRuntime } from '../api/profiles'
+import { mapApplyErrorToMessageKey } from './profileErrorMapper'
 import type { AppStatus, Profile } from '../types/profiles'
 
 const fallbackProfiles: Profile[] = [
@@ -40,10 +41,6 @@ interface UseProfilesManagerResult {
   warning: string | null
   loadingProfileId: string | null
   onApplyProfile: (profileId: string) => Promise<void>
-}
-
-function getBackendErrorCode(rawError: string): string {
-  return rawError.split('|')[0]?.trim().toLowerCase() ?? 'unknown'
 }
 
 export function useProfilesManager(): UseProfilesManagerResult {
@@ -115,29 +112,12 @@ export function useProfilesManager(): UseProfilesManagerResult {
       setTimeout(() => setSuccess(null), 5000)
     } catch (err) {
       const details = String(err)
-      const backendCode = getBackendErrorCode(details)
-
-      if (backendCode === 'admin_required') {
-        setError(t('app.messages.adminRequired'))
-        return
-      }
-
-      if (backendCode === 'profile_not_found') {
-        setError(t('app.messages.profileNotFound'))
-        return
-      }
-
-      if (backendCode === 'script_execution_failed') {
-        setError(t('app.messages.scriptExecutionFailed'))
-        return
-      }
-
-      if (backendCode === 'profile_apply_failed') {
-        setError(t('app.messages.profileApplyFailed'))
-        return
-      }
-
-      setError(t('app.messages.applyError', { details }))
+      const errorMessageKey = mapApplyErrorToMessageKey(details)
+      setError(
+        errorMessageKey === 'app.messages.applyError'
+          ? t(errorMessageKey, { details })
+          : t(errorMessageKey),
+      )
     } finally {
       setLoadingProfileId(null)
     }
