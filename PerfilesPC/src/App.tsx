@@ -15,11 +15,7 @@ function App() {
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
 
-  useEffect(() => {
-    loadProfiles()
-  }, [])
-
-  const loadProfiles = async () => {
+  async function loadProfiles() {
     try {
       const profilesList = await invoke<Profile[]>('get_profiles')
       setProfiles(profilesList)
@@ -27,6 +23,10 @@ function App() {
       setError(`Error al cargar perfiles: ${err}`)
     }
   }
+
+  useEffect(() => {
+    loadProfiles()
+  }, [])
 
   const applyProfile = async (profileId: string) => {
     setLoading(true)
