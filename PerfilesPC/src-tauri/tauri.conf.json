@@ -14,16 +14,21 @@
       {
         "title": "perfiles-pc",
         "width": 800,
-        "height": 600
+        "height": 600,
+        "minWidth": 760,
+        "minHeight": 560
       }
     ],
     "security": {
-      "csp": null
+      "csp": "default-src 'self'; img-src 'self' asset: data:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self' ipc: http://ipc.localhost"
     }
   },
   "bundle": {
     "active": true,
-    "targets": "all",
+    "targets": [
+      "nsis",
+      "msi"
+    ],
     "resources": {
       "../scripts/profiles/*.ps1": "scripts/profiles/"
     },
