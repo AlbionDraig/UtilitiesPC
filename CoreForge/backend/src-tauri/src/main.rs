@@ -2,5 +2,5 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 fn main() {
-    perfiles_pc_lib::run()
+    coreforge_lib::run()
 }
