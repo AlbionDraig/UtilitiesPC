@@ -26,18 +26,20 @@ Herramienta de escritorio Tauri para seleccionar y aplicar perfiles de sistema o
 ### Modo desarrollo
 
 ```bash
-# Instalar dependencias
-npm install
+# Instalar dependencias (desde frontend/)
+cd frontend && npm install
 
-# Ejecutar en modo desarrollo
-npm run tauri dev
+# Ejecutar en modo desarrollo (desde backend/src-tauri/)
+cd backend/src-tauri && cargo tauri dev
 ```
 
 ### Build para producción
 
 ```bash
-npm run build
-npm run tauri build
+# Desde frontend/
+cd frontend && npm run build
+# Desde backend/src-tauri/
+cd backend/src-tauri && cargo tauri build
 ```
 
 ## Cómo funciona
