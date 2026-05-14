@@ -6,6 +6,9 @@
   "permissionsAdmin": "Administrador",
   "permissionsUser": "Usuario estandar",
   "languageSelector": "Selector de idioma",
+  "activeProfile": "Perfil activo",
+  "activeBadge": "Activo",
+  "applying": "Aplicando perfil",
   "messages": {
     "browserInfo": "Modo navegador: la aplicacion muestra perfiles, pero solo puede aplicarlos dentro de la app de escritorio Tauri.",
     "desktopStatusReady": "App desktop detectada. Puedes aplicar perfiles.",

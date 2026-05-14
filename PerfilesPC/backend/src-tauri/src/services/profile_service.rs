@@ -3,6 +3,16 @@ use std::process::Command;
 use crate::error::AppError;
 use crate::models::{available_profiles, AppStatus, Profile};
 
+fn no_window_command(program: &str) -> Command {
+    let mut cmd = Command::new(program);
+    #[cfg(windows)]
+    {
+        use std::os::windows::process::CommandExt;
+        cmd.creation_flags(0x0800_0000);
+    }
+    cmd
+}
+
 const BASE_GAMING_PROCESSES: [&str; 14] = [
     "Docker Desktop",
     "com.docker.backend",
@@ -37,7 +47,7 @@ fn stop_process_safely(image_name: &str) {
     };
 
     for candidate in candidates {
-        let _ = Command::new("taskkill")
+        let _ = no_window_command("taskkill")
             .args(["/F", "/IM", candidate.as_str()])
             .output();
     }
@@ -50,7 +60,7 @@ fn stop_targets(process_names: &[&str]) {
 }
 
 fn set_power_scheme(scheme: &str) -> Result<(), AppError> {
-    let output = Command::new("powercfg")
+    let output = no_window_command("powercfg")
         .args(["/setactive", scheme])
         .output()
         .map_err(|_| AppError::ScriptExecutionFailed)?;
@@ -63,13 +73,13 @@ fn set_power_scheme(scheme: &str) -> Result<(), AppError> {
 }
 
 fn shutdown_wsl_if_available() {
-    if Command::new("where")
+    if no_window_command("where")
         .arg("wsl")
         .output()
         .map(|out| out.status.success())
         .unwrap_or(false)
     {
-        let _ = Command::new("wsl").arg("--shutdown").output();
+        let _ = no_window_command("wsl").arg("--shutdown").output();
     }
 }
 
@@ -78,7 +88,7 @@ fn launch_app_if_exists(path: &str, args: &[&str]) {
         return;
     }
 
-    let mut command = Command::new(path);
+    let mut command = no_window_command(path);
     if !args.is_empty() {
         command.args(args);
     }
@@ -87,13 +97,13 @@ fn launch_app_if_exists(path: &str, args: &[&str]) {
 }
 
 fn launch_windows_terminal_if_available() {
-    if Command::new("where")
+    if no_window_command("where")
         .arg("wt")
         .output()
         .map(|out| out.status.success())
         .unwrap_or(false)
     {
-        let _ = Command::new("wt").spawn();
+        let _ = no_window_command("wt").spawn();
     }
 }
 
@@ -147,7 +157,7 @@ fn apply_windows_profile(profile_id: &str) -> Result<(), AppError> {
 fn is_running_as_admin() -> bool {
     #[cfg(target_os = "windows")]
     {
-        Command::new("net")
+        no_window_command("net")
             .arg("session")
             .output()
             .map(|result| result.status.success())

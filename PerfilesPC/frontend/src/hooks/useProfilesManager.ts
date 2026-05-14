@@ -36,6 +36,7 @@ interface UseProfilesManagerResult {
   info: string | null
   warning: string | null
   loadingProfileId: string | null
+  activeProfileId: string | null
   onApplyProfile: (profileId: string) => Promise<void>
 }
 
@@ -50,6 +51,7 @@ export function useProfilesManager(): UseProfilesManagerResult {
   const [info, setInfo] = useState<string | null>(null)
   const [warning, setWarning] = useState<string | null>(null)
   const [loadingProfileId, setLoadingProfileId] = useState<string | null>(null)
+  const [activeProfileId, setActiveProfileId] = useState<string | null>(null)
 
   const loadProfiles = useCallback(async () => {
     setWarning(null)
@@ -104,6 +106,7 @@ export function useProfilesManager(): UseProfilesManagerResult {
     try {
       const appliedProfileId = await applyProfile(profileId)
       const profileName = t(`profile.names.${appliedProfileId}`, { defaultValue: profileId })
+      setActiveProfileId(appliedProfileId)
       setSuccess(t('app.messages.applySuccess', { profileName }))
       setTimeout(() => setSuccess(null), 5000)
     } catch (err) {
@@ -128,6 +131,7 @@ export function useProfilesManager(): UseProfilesManagerResult {
     info,
     warning,
     loadingProfileId,
+    activeProfileId,
     onApplyProfile,
   }
 }

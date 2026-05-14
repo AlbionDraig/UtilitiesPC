@@ -6,6 +6,9 @@
   "permissionsAdmin": "Administrator",
   "permissionsUser": "Standard user",
   "languageSelector": "Language selector",
+  "activeProfile": "Active profile",
+  "activeBadge": "Active",
+  "applying": "Applying profile",
   "messages": {
     "browserInfo": "Browser mode: profiles are visible, but they can only be applied inside the Tauri desktop app.",
     "desktopStatusReady": "Desktop app detected. You can apply profiles.",

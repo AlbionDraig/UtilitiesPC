@@ -30,6 +30,7 @@ function App() {
     info,
     warning,
     loadingProfileId,
+    activeProfileId,
     onApplyProfile,
   } = useProfilesManager()
 
@@ -85,6 +86,23 @@ function App() {
             {t('app.permissions')}:{' '}
             {appStatus.isAdmin ? t('app.permissionsAdmin') : t('app.permissionsUser')}
           </span>
+          {activeProfileId && (
+            <span className="meta-pill meta-pill--active">
+              ✓ {t('app.activeProfile')}: {t(`profile.names.${activeProfileId}`, { defaultValue: activeProfileId })}
+            </span>
+          )}
+        </div>
+      )}
+
+      {loadingProfileId !== null && (
+        <div className="applying-bar" role="status" aria-live="polite">
+          <div className="applying-bar-label">
+            <span className="applying-bar-spinner" aria-hidden="true" />
+            {t('app.applying')}: {t(`profile.names.${loadingProfileId}`, { defaultValue: loadingProfileId })}
+          </div>
+          <div className="applying-bar-track" aria-hidden="true">
+            <div className="applying-bar-fill" />
+          </div>
         </div>
       )}
 
@@ -104,12 +122,17 @@ function App() {
           const indicators = getLocalizedIndicators(profile.id)
 
           return (
-            <div key={profile.id} className={`profile-card profile-card--${profile.id}`}>
+            <div key={profile.id} className={`profile-card profile-card--${profile.id}${activeProfileId === profile.id ? ' profile-card--active' : ''}`}>
               <div className="profile-card-header">
                 <h2>{profileName}</h2>
-                <span className={`intensity-pill intensity-pill--${detail.intensity}`}>
-                  {t('profile.impact')}: {t(`profile.intensity.${detail.intensity}`)}
-                </span>
+                <div className="profile-card-badges">
+                  {activeProfileId === profile.id && (
+                    <span className="active-badge">✓ {t('app.activeBadge')}</span>
+                  )}
+                  <span className={`intensity-pill intensity-pill--${detail.intensity}`}>
+                    {t('profile.impact')}: {t(`profile.intensity.${detail.intensity}`)}
+                  </span>
+                </div>
               </div>
               <p className="profile-description">{description}</p>
 
