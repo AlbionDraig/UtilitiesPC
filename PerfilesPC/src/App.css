@@ -17,6 +17,40 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.18);
 }
 
+.header-toolbar {
+  width: min(1100px, 100%);
+  margin: 0 auto 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.locale-switch {
+  display: inline-flex;
+  gap: 0.35rem;
+  padding: 0.25rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+}
+
+.locale-button {
+  border: none;
+  border-radius: 999px;
+  padding: 0.28rem 0.65rem;
+  font-weight: 700;
+  font-size: 0.78rem;
+  color: #e2e8f0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.locale-button--active {
+  color: #0f172a;
+  background: #f8fafc;
+}
+
 .app-header h1 {
   margin: 0 0 0.5rem 0;
   font-size: 2.5rem;
@@ -128,19 +162,19 @@
   display: inline-flex;
   align-items: center;
   border-radius: 999px;
-  padding: 0.3rem 0.7rem;
-  font-size: 0.75rem;
+  white-space: nowrap;
+  padding: 0.36rem 0.75rem;
+  font-size: 0.78rem;
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
+  line-height: 1;
 }
 
-.intensity-pill--media {
+.intensity-pill--medium {
   background: #e0f2fe;
   color: #075985;
 }
 
-.intensity-pill--alta {
+.intensity-pill--high {
   background: #fef3c7;
   color: #92400e;
 }
@@ -202,6 +236,12 @@
 }
 
 @media (max-width: 768px) {
+  .header-toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
   .app-header h1 {
     font-size: 1.8rem;
   }
