@@ -1,0 +1,87 @@
+{
+  "app": {
+    "title": "Gestor de Perfiles PC",
+    "subtitle": "Selecciona un perfil para optimizar tu sistema",
+    "runtime": "Entorno",
+    "permissions": "Permisos",
+    "permissionsAdmin": "Administrador",
+    "permissionsUser": "Usuario estandar",
+    "languageSelector": "Selector de idioma",
+    "messages": {
+      "browserInfo": "Modo navegador: la aplicacion muestra perfiles, pero solo puede aplicarlos dentro de la app de escritorio Tauri.",
+      "desktopStatusReady": "App desktop detectada. Puedes aplicar perfiles.",
+      "desktopStatusBlocked": "App desktop sin permisos suficientes.",
+      "adminRequired": "Ejecuta la aplicacion como administrador para aplicar perfiles.",
+      "loadError": "Error al cargar perfiles: {{details}}",
+      "applyError": "Error: {{details}}"
+    }
+  },
+  "actions": {
+    "apply": "Aplicar perfil",
+    "applying": "Aplicando...",
+    "desktopOnly": "Solo app desktop"
+  },
+  "profile": {
+    "impact": "Impacto",
+    "focus": "Foco",
+    "target": "Objetivo",
+    "indicatorsLabel": "Indicadores del perfil",
+    "intensity": {
+      "medium": "medio",
+      "high": "alto"
+    },
+    "fallback": {
+      "focus": "Perfil personalizado",
+      "target": "Uso general",
+      "indicator": "Configuracion no detallada en frontend"
+    },
+    "names": {
+      "gamer": "Gamer",
+      "trabajo": "Trabajo",
+      "gamer_agresivo": "Gamer Agresivo",
+      "trabajo_dev": "Trabajo Dev"
+    },
+    "details": {
+      "gamer": {
+        "description": "Optimizado para juegos",
+        "focus": "Rendimiento gaming",
+        "target": "FPS estables",
+        "indicators": [
+          "Cierra procesos pesados en segundo plano",
+          "Reduce consumo de RAM de apps no esenciales",
+          "Libera recursos para GPU y juego activo"
+        ]
+      },
+      "trabajo": {
+        "description": "Perfil productivo estandar",
+        "focus": "Productividad diaria",
+        "target": "Estabilidad general",
+        "indicators": [
+          "Mantiene apps necesarias para oficina",
+          "Evita cierres agresivos de servicios utiles",
+          "Prioriza estabilidad sobre maximo rendimiento"
+        ]
+      },
+      "gamer_agresivo": {
+        "description": "Maximo rendimiento para gaming extremo",
+        "focus": "Rendimiento maximo",
+        "target": "Latencia minima",
+        "indicators": [
+          "Cierre agresivo de procesos no criticos",
+          "Prioriza recursos para juego en primer plano",
+          "Disenado para sesiones de alto consumo"
+        ]
+      },
+      "trabajo_dev": {
+        "description": "Optimizado para desarrollo",
+        "focus": "Entorno de desarrollo",
+        "target": "Flujo dev fluido",
+        "indicators": [
+          "Conserva herramientas de desarrollo activas",
+          "Equilibra rendimiento con multitarea tecnica",
+          "Optimiza para IDE, terminal y navegador"
+        ]
+      }
+    }
+  }
+}

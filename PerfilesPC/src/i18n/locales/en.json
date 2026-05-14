@@ -1,0 +1,87 @@
+{
+  "app": {
+    "title": "PC Profile Manager",
+    "subtitle": "Select a profile to optimize your system",
+    "runtime": "Runtime",
+    "permissions": "Permissions",
+    "permissionsAdmin": "Administrator",
+    "permissionsUser": "Standard user",
+    "languageSelector": "Language selector",
+    "messages": {
+      "browserInfo": "Browser mode: profiles are visible, but they can only be applied inside the Tauri desktop app.",
+      "desktopStatusReady": "Desktop app detected. You can apply profiles.",
+      "desktopStatusBlocked": "Desktop app is running without required permissions.",
+      "adminRequired": "Run the app as administrator to apply profiles.",
+      "loadError": "Error loading profiles: {{details}}",
+      "applyError": "Error: {{details}}"
+    }
+  },
+  "actions": {
+    "apply": "Apply profile",
+    "applying": "Applying...",
+    "desktopOnly": "Desktop app only"
+  },
+  "profile": {
+    "impact": "Impact",
+    "focus": "Focus",
+    "target": "Target",
+    "indicatorsLabel": "Profile indicators",
+    "intensity": {
+      "medium": "medium",
+      "high": "high"
+    },
+    "fallback": {
+      "focus": "Custom profile",
+      "target": "General usage",
+      "indicator": "Configuration details are not available in frontend"
+    },
+    "names": {
+      "gamer": "Gamer",
+      "trabajo": "Work",
+      "gamer_agresivo": "Aggressive Gamer",
+      "trabajo_dev": "Dev Work"
+    },
+    "details": {
+      "gamer": {
+        "description": "Optimized for gaming",
+        "focus": "Gaming performance",
+        "target": "Stable FPS",
+        "indicators": [
+          "Closes heavy background processes",
+          "Reduces RAM usage from non-essential apps",
+          "Frees resources for GPU and active game"
+        ]
+      },
+      "trabajo": {
+        "description": "Standard productivity profile",
+        "focus": "Daily productivity",
+        "target": "General stability",
+        "indicators": [
+          "Keeps office-essential apps running",
+          "Avoids aggressive shutdown of useful services",
+          "Prioritizes stability over maximum performance"
+        ]
+      },
+      "gamer_agresivo": {
+        "description": "Maximum performance for extreme gaming",
+        "focus": "Maximum performance",
+        "target": "Minimum latency",
+        "indicators": [
+          "Aggressively closes non-critical processes",
+          "Prioritizes resources for foreground game",
+          "Designed for high-demand sessions"
+        ]
+      },
+      "trabajo_dev": {
+        "description": "Optimized for development",
+        "focus": "Development environment",
+        "target": "Smooth dev workflow",
+        "indicators": [
+          "Keeps development tools active",
+          "Balances performance with technical multitasking",
+          "Optimized for IDE, terminal, and browser"
+        ]
+      }
+    }
+  }
+}
