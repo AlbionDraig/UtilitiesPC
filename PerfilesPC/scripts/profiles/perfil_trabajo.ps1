@@ -1,22 +1,15 @@
 ﻿param()
-$ErrorActionPreference = "SilentlyContinue"
 
-Write-Host "Aplicando perfil TRABAJO..." -ForegroundColor Cyan
+$ErrorActionPreference = 'Stop'
 
-# Energia equilibrada para trabajo diario
-powercfg /setactive SCHEME_BALANCED | Out-Null
+. (Join-Path $PSScriptRoot 'profile_core.ps1')
 
-# Inicia Docker Desktop si existe
-$dockerPath = "C:\Program Files\Docker\Docker\Docker Desktop.exe"
-if (Test-Path $dockerPath) {
-  Start-Process -FilePath $dockerPath | Out-Null
+Write-Host 'Aplicando perfil TRABAJO...' -ForegroundColor Cyan
+
+try {
+  Invoke-PerformanceProfile -ProfileId 'trabajo'
 }
-
-# Inicia Discord si esta instalado (opcional en trabajo)
-$discordUpdate = Join-Path $env:LOCALAPPDATA 'Discord\Update.exe'
-if (Test-Path $discordUpdate) {
-  Start-Process -FilePath $discordUpdate -ArgumentList '--processStart Discord.exe' | Out-Null
+catch {
+  Write-Error "No se pudo aplicar el perfil trabajo: $($_.Exception.Message)"
+  exit 1
 }
-
-Write-Host "Perfil TRABAJO aplicado." -ForegroundColor Green
-Write-Host "Docker/Discord se abren solo si estan instalados." -ForegroundColor Yellow

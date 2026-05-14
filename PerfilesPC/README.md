@@ -55,6 +55,7 @@ npm run tauri build
 - `scripts/profiles/perfil_trabajo.ps1` - Configuración para trabajo general
 - `scripts/profiles/perfil_gamer_agresivo.ps1` - Máxima optimización para juegos
 - `scripts/profiles/perfil_trabajo_dev.ps1` - Ambiente para desarrollo
+- `scripts/profiles/profile_core.ps1` - Núcleo compartido con lógica reutilizable para aplicar perfiles
 
 ## Estructura del proyecto
 
