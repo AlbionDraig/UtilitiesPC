@@ -9,6 +9,37 @@ interface Profile {
   script: string
 }
 
+const fallbackProfiles: Profile[] = [
+  {
+    id: 'gamer',
+    name: 'Gamer',
+    description: 'Optimizado para juegos',
+    script: 'perfil_gamer.ps1',
+  },
+  {
+    id: 'trabajo',
+    name: 'Trabajo',
+    description: 'Perfil productivo estandar',
+    script: 'perfil_trabajo.ps1',
+  },
+  {
+    id: 'gamer_agresivo',
+    name: 'Gamer Agresivo',
+    description: 'Maximo rendimiento para gaming extremo',
+    script: 'perfil_gamer_agresivo.ps1',
+  },
+  {
+    id: 'trabajo_dev',
+    name: 'Trabajo Dev',
+    description: 'Optimizado para desarrollo',
+    script: 'perfil_trabajo_dev.ps1',
+  },
+]
+
+function isTauriRuntime(): boolean {
+  return typeof window !== 'undefined' && '__TAURI_INTERNALS__' in window
+}
+
 function App() {
   const [profiles, setProfiles] = useState<Profile[]>([])
   const [loading, setLoading] = useState(false)
@@ -16,6 +47,14 @@ function App() {
   const [success, setSuccess] = useState<string | null>(null)
 
   async function loadProfiles() {
+    if (!isTauriRuntime()) {
+      setProfiles(fallbackProfiles)
+      setError(
+        'Modo navegador: la aplicacion muestra perfiles, pero solo puede aplicarlos dentro de la app de escritorio Tauri.',
+      )
+      return
+    }
+
     try {
       const profilesList = await invoke<Profile[]>('get_profiles')
       setProfiles(profilesList)
@@ -29,6 +68,11 @@ function App() {
   }, [])
 
   const applyProfile = async (profileId: string) => {
+    if (!isTauriRuntime()) {
+      setError('Para aplicar perfiles debes abrir la app de escritorio (Tauri).')
+      return
+    }
+
     setLoading(true)
     setError(null)
     setSuccess(null)
