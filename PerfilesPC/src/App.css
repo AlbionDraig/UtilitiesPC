@@ -57,6 +57,12 @@
   border: 1px solid #cfc;
 }
 
+.alert-info {
+  background-color: #eef6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+}
+
 .profiles-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));

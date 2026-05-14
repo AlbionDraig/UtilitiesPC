@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { invoke } from '@tauri-apps/api/core'
 import './App.css'
 
@@ -45,11 +45,13 @@ function App() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
+  const [info, setInfo] = useState<string | null>(null)
+  const tauriRuntime = isTauriRuntime()
 
-  async function loadProfiles() {
-    if (!isTauriRuntime()) {
+  const loadProfiles = useCallback(async () => {
+    if (!tauriRuntime) {
       setProfiles(fallbackProfiles)
-      setError(
+      setInfo(
         'Modo navegador: la aplicacion muestra perfiles, pero solo puede aplicarlos dentro de la app de escritorio Tauri.',
       )
       return
@@ -61,18 +63,13 @@ function App() {
     } catch (err) {
       setError(`Error al cargar perfiles: ${err}`)
     }
-  }
+  }, [tauriRuntime])
 
   useEffect(() => {
     loadProfiles()
-  }, [])
+  }, [loadProfiles])
 
   const applyProfile = async (profileId: string) => {
-    if (!isTauriRuntime()) {
-      setError('Para aplicar perfiles debes abrir la app de escritorio (Tauri).')
-      return
-    }
-
     setLoading(true)
     setError(null)
     setSuccess(null)
@@ -97,6 +94,7 @@ function App() {
         <p>Selecciona un perfil para optimizar tu sistema</p>
       </header>
 
+      {info && <div className="alert alert-info">{info}</div>}
       {error && <div className="alert alert-error">{error}</div>}
       {success && <div className="alert alert-success">{success}</div>}
 
@@ -107,10 +105,10 @@ function App() {
             <p className="profile-description">{profile.description}</p>
             <button
               onClick={() => applyProfile(profile.id)}
-              disabled={loading}
+              disabled={loading || !tauriRuntime}
               className="profile-button"
             >
-              {loading ? 'Aplicando...' : 'Aplicar Perfil'}
+              {loading ? 'Aplicando...' : tauriRuntime ? 'Aplicar Perfil' : 'Solo app desktop'}
             </button>
           </div>
         ))}
