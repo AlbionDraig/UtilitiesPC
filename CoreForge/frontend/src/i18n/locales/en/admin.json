@@ -1,0 +1,25 @@
+{
+  "title": "Admin Panel",
+  "close": "Close panel",
+  "loading": "Loading configuration...",
+  "profileSelector": "Profile selector",
+  "noRules": "No rules configured for this profile.",
+  "colAction": "Action",
+  "colLabel": "Name",
+  "colValue": "Process / Executable",
+  "action": {
+    "close": "Close",
+    "open": "Open"
+  },
+  "addRuleTitle": "Add new rule",
+  "addRule": "Add",
+  "labelPlaceholder": "App name",
+  "processNamePlaceholder": "Process name (e.g. Discord)",
+  "executablePathPlaceholder": "Executable path",
+  "argsPlaceholder": "Arguments (optional)",
+  "removeRule": "Remove rule",
+  "save": "Save changes",
+  "saving": "Saving...",
+  "saved": "Saved",
+  "unsaved": "Unsaved changes"
+}

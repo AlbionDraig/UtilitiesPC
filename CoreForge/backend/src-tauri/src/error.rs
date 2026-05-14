@@ -4,6 +4,7 @@ pub enum AppError {
     ProfileNotFound { profile_id: String },
     ScriptExecutionFailed,
     ProfileApplyFailed { profile_id: String },
+    ConfigSaveFailed,
 }
 
 #[derive(serde::Serialize)]
@@ -21,6 +22,7 @@ impl AppError {
             Self::ProfileNotFound { .. } => "profile_not_found",
             Self::ScriptExecutionFailed => "script_execution_failed",
             Self::ProfileApplyFailed { .. } => "profile_apply_failed",
+            Self::ConfigSaveFailed => "config_save_failed",
         }
     }
 
@@ -28,7 +30,7 @@ impl AppError {
         match self {
             Self::ProfileNotFound { profile_id } => Some(profile_id.clone()),
             Self::ProfileApplyFailed { profile_id } => Some(profile_id.clone()),
-            _ => None,
+            Self::AdminRequired | Self::ScriptExecutionFailed | Self::ConfigSaveFailed => None,
         }
     }
 

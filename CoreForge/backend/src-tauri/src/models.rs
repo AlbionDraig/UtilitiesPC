@@ -1,3 +1,38 @@
+#[derive(serde::Serialize, serde::Deserialize, Clone, Debug, PartialEq)]
+#[serde(rename_all = "lowercase")]
+pub enum AppAction {
+    Close,
+    Open,
+}
+
+/// Rule that defines what to close or open when a profile is applied.
+#[derive(serde::Serialize, serde::Deserialize, Clone, Debug)]
+#[serde(rename_all = "camelCase")]
+pub struct AppRule {
+    pub id: String,
+    pub label: String,
+    pub action: AppAction,
+    /// Process name to kill (Close action). May omit ".exe" — both forms are tried.
+    pub process_name: Option<String>,
+    /// Executable path or command to launch (Open action).
+    pub executable_path: Option<String>,
+    /// Optional arguments for the launched executable.
+    #[serde(default)]
+    pub args: Vec<String>,
+}
+
+#[derive(serde::Serialize, serde::Deserialize, Clone, Debug, Default)]
+#[serde(rename_all = "camelCase")]
+pub struct ProfileRules {
+    pub rules: Vec<AppRule>,
+}
+
+#[derive(serde::Serialize, serde::Deserialize, Clone, Debug)]
+#[serde(rename_all = "camelCase")]
+pub struct FullConfig {
+    pub profiles: std::collections::HashMap<String, ProfileRules>,
+}
+
 #[derive(serde::Serialize, serde::Deserialize, Clone, Debug)]
 pub struct Profile {
     pub id: String,

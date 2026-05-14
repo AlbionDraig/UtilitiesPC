@@ -1,6 +1,7 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import './App.css'
+import { AdminPanel } from './components/AdminPanel'
 import { useProfilesManager } from './hooks/useProfilesManager'
 import type { ProfileDetail, SupportedLocale } from './types/profiles'
 
@@ -34,6 +35,8 @@ function App() {
     onApplyProfile,
   } = useProfilesManager()
 
+  const [showAdmin, setShowAdmin] = useState(false)
+
   const locale = useMemo<SupportedLocale>(() => {
     return i18n.resolvedLanguage?.startsWith('en') ? 'en' : 'es'
   }, [i18n.resolvedLanguage])
@@ -49,10 +52,24 @@ function App() {
 
   return (
     <div className="app-container">
+      {showAdmin && tauriRuntime && (
+        <AdminPanel profiles={profiles} onClose={() => setShowAdmin(false)} />
+      )}
       <header className="app-header">
         <div className="header-toolbar">
           <h1>⚙️ {t('app.title')}</h1>
-          <div className="locale-switch" role="group" aria-label={t('app.languageSelector')}>
+          <div className="header-toolbar-right">
+            {tauriRuntime && (
+              <button
+                type="button"
+                className="admin-trigger-button"
+                onClick={() => setShowAdmin(true)}
+                title={t('admin.title')}
+              >
+                ☰ {t('admin.title')}
+              </button>
+            )}
+            <div className="locale-switch" role="group" aria-label={t('app.languageSelector')}>
             <button
               type="button"
               className={`locale-button ${locale === 'es' ? 'locale-button--active' : ''}`}
@@ -67,6 +84,7 @@ function App() {
             >
               EN
             </button>
+          </div>
           </div>
         </div>
         <p>{t('app.subtitle')}</p>

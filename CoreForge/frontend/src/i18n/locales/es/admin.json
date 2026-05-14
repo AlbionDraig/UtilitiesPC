@@ -1,0 +1,25 @@
+{
+  "title": "Panel de Administracion",
+  "close": "Cerrar panel",
+  "loading": "Cargando configuracion...",
+  "profileSelector": "Selector de perfil",
+  "noRules": "Este perfil no tiene reglas configuradas.",
+  "colAction": "Accion",
+  "colLabel": "Nombre",
+  "colValue": "Proceso / Ejecutable",
+  "action": {
+    "close": "Cerrar",
+    "open": "Abrir"
+  },
+  "addRuleTitle": "Agregar nueva regla",
+  "addRule": "Agregar",
+  "labelPlaceholder": "Nombre de la app",
+  "processNamePlaceholder": "Nombre del proceso (ej: Discord)",
+  "executablePathPlaceholder": "Ruta del ejecutable",
+  "argsPlaceholder": "Argumentos (opcional)",
+  "removeRule": "Eliminar regla",
+  "save": "Guardar cambios",
+  "saving": "Guardando...",
+  "saved": "Guardado",
+  "unsaved": "Cambios sin guardar"
+}
