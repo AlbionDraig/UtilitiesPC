@@ -1,8 +1,33 @@
 :root {
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --sans: 'Segoe UI', system-ui, Roboto, sans-serif;
+  --mono: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
 
-  font: 16px/145% var(--sans);
-  letter-spacing: 0.18px;
+  /* Neon palette */
+  --neon-cyan:    #00f5ff;
+  --neon-magenta: #ff0090;
+  --neon-yellow:  #ffd700;
+  --neon-green:   #00ff88;
+  --neon-blue:    #0080ff;
+  --neon-orange:  #ff6600;
+
+  /* Background tones */
+  --bg-void:   #04080f;
+  --bg-deep:   #080c14;
+  --bg-mid:    #0d1520;
+  --bg-card:   rgba(10, 16, 28, 0.88);
+  --bg-glass:  rgba(0, 245, 255, 0.04);
+
+  /* Text */
+  --text-bright:  #e8f8ff;
+  --text-primary: #a8d8e8;
+  --text-muted:   #4a7a8a;
+
+  /* Borders */
+  --border-dim:   rgba(0, 245, 255, 0.12);
+  --border-glow:  rgba(0, 245, 255, 0.45);
+
+  font: 15px/150% var(--sans);
+  letter-spacing: 0.2px;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -20,8 +45,15 @@
 body {
   margin: 0;
   padding: 0;
+  background-color: var(--bg-void);
+  color: var(--text-primary);
 }
 
 *, *::before, *::after {
   box-sizing: inherit;
 }
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-deep); }
+::-webkit-scrollbar-thumb { background: var(--neon-cyan); border-radius: 3px; opacity: 0.4; }
+
