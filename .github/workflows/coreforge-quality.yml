@@ -1,24 +1,24 @@
-name: perfilespc-quality
+name: coreforge-quality
 
 on:
   pull_request:
     paths:
-      - 'PerfilesPC/**'
-      - '.github/workflows/perfilespc-quality.yml'
+      - 'CoreForge/**'
+      - '.github/workflows/coreforge-quality.yml'
   push:
     branches:
       - main
       - develop
     paths:
-      - 'PerfilesPC/**'
-      - '.github/workflows/perfilespc-quality.yml'
+      - 'CoreForge/**'
+      - '.github/workflows/coreforge-quality.yml'
 
 jobs:
   frontend-quality:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: PerfilesPC/frontend
+        working-directory: CoreForge/frontend
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -28,7 +28,7 @@ jobs:
         with:
           node-version: '22'
           cache: 'npm'
-          cache-dependency-path: PerfilesPC/frontend/package-lock.json
+          cache-dependency-path: CoreForge/frontend/package-lock.json
 
       - name: Install dependencies
         run: npm ci
@@ -49,7 +49,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: PerfilesPC/backend/src-tauri
+        working-directory: CoreForge/backend/src-tauri
     steps:
       - name: Checkout
         uses: actions/checkout@v4
