@@ -12,6 +12,7 @@
         "test:i18n": "vitest run src/i18n/locales/resources.test.ts",
         "preview": "vite preview",
         "tauri": "tauri",
+        "tauri:icon:windows": "powershell -ExecutionPolicy Bypass -File ./scripts/generate-icons-windows.ps1",
         "tauri:build": "tauri build --config ../backend/src-tauri/tauri.conf.json",
         "tauri:dev": "tauri dev --config ../backend/src-tauri/tauri.conf.json"
     },

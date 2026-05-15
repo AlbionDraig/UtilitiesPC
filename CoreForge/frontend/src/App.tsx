@@ -57,7 +57,7 @@ function App() {
       )}
       <header className="app-header">
         <div className="header-toolbar">
-          <h1>⚙️ {t('app.title')}</h1>
+          <h1>{t('app.title')}</h1>
           <div className="header-toolbar-right">
             <button
               type="button"

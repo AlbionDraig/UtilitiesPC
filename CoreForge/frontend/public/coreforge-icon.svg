@@ -23,7 +23,7 @@
 
     <!-- Drop shadow to keep the icon readable over light backgrounds -->
     <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="4" stdDeviation="10" flood-color="#000000" flood-opacity="0.45"/>
+      <feDropShadow dx="0" dy="4" stdDeviation="10" flood-color="#000000" flood-opacity="0.35"/>
     </filter>
 
   </defs>
@@ -46,7 +46,7 @@
 
     <!-- Track arc (full 270°, dark navy) -->
     <path d="M 146 378 A 155 155 0 1 1 366 378"
-      fill="none" stroke="#0d2b4e" stroke-width="22"
+      fill="none" stroke="#1B4F8A" stroke-width="24"
       stroke-linecap="round" opacity="0.90"/>
 
     <!-- Active arc (70% = 189°, warm orange) -->
@@ -54,20 +54,20 @@
     <!-- cos324°=0.809 sin324°=-0.588 → (256+125, 268-91) = (381,177)  -->
     <!-- 189° > 180° → large-arc-flag = 1                               -->
     <path d="M 146 378 A 155 155 0 1 1 381 177"
-      fill="none" stroke="#FF6D00" stroke-width="22"
+      fill="none" stroke="#FF6D00" stroke-width="24"
       stroke-linecap="round"
       filter="url(#arcGlow)"/>
 
     <!-- Thin inner ring — depth detail (Material elevation) -->
     <path d="M 185 339 A 100 100 0 1 1 327 339"
-      fill="none" stroke="#1565C0" stroke-width="2"
-      stroke-linecap="round" opacity="0.40"/>
+      fill="none" stroke="#90CAF9" stroke-width="2.5"
+      stroke-linecap="round" opacity="0.60"/>
 
   </g>
 
   <!-- ── Tick marks — 4 profiles ── -->
   <!-- Radial lines from r=161 to r=177, at 0% / 33% / 66% / 100%  -->
-  <g stroke="#90CAF9" stroke-width="3.5" stroke-linecap="round" opacity="0.90">
+  <g stroke="#E3F2FD" stroke-width="4" stroke-linecap="round" opacity="0.95">
     <!-- 0%  SVG 135°: unit(-0.707, 0.707) inner(146,378) outer(133,390) -->
     <line x1="146" y1="378" x2="133" y2="390"/>
     <!-- 33% SVG 224°: unit(-0.719,-0.695) inner(145,161) outer(133,150) -->
@@ -83,11 +83,11 @@
   <!-- Tip   r=142: (256+115, 268-83) = (371, 185)                       -->
   <!-- Tail  r= 30 opposite: (256-24, 268+18) = (232, 286)               -->
   <line x1="232" y1="286" x2="371" y2="185"
-    stroke="#FFFFFF" stroke-width="5" stroke-linecap="round"
+    stroke="#FFFFFF" stroke-width="6" stroke-linecap="round"
     filter="url(#needleGlow)"/>
 
   <!-- ── Center pivot ── -->
-  <circle cx="256" cy="268" r="14" fill="#FF6D00" filter="url(#arcGlow)"/>
-  <circle cx="256" cy="268" r="7"  fill="#FFFFFF"/>
+  <circle cx="256" cy="268" r="15" fill="#FF6D00" filter="url(#arcGlow)"/>
+  <circle cx="256" cy="268" r="7.5"  fill="#FFFFFF"/>
 
 </svg>
