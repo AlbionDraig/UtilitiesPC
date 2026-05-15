@@ -1,0 +1,29 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+  <!--
+    CoreForge favicon — simplified gauge, works at 16px–48px.
+    Geometry mirrors coreforge-icon.svg scaled to 48x48:
+      center (24,24)  radius 17  stroke 4.5  linecap round
+      track  : SVG 135° → SVG 45°  (270°, dark blue)
+      active : SVG 135° → SVG 324° (189° ≈ 70%, orange)
+      needle : direction SVG 324°  tip r=14 → (35,16)
+  -->
+
+  <!-- Background -->
+  <rect width="48" height="48" rx="10" fill="#0d1f3c"/>
+
+  <!-- Track arc (270°, dark blue) -->
+  <path d="M 12 36 A 17 17 0 1 1 36 36"
+    fill="none" stroke="#1565C0" stroke-width="4.5" stroke-linecap="round"/>
+
+  <!-- Active arc (70% = 189°, orange) -->
+  <path d="M 12 36 A 17 17 0 1 1 38 14"
+    fill="none" stroke="#FF6D00" stroke-width="4.5" stroke-linecap="round"/>
+
+  <!-- Needle -->
+  <line x1="24" y1="24" x2="35" y2="16"
+    stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Center pivot -->
+  <circle cx="24" cy="24" r="2.8" fill="#FF6D00"/>
+  <circle cx="24" cy="24" r="1.3" fill="#FFFFFF"/>
+</svg>

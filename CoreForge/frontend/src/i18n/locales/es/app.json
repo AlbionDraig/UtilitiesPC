@@ -1,0 +1,24 @@
+{
+  "title": "CoreForge",
+  "subtitle": "Selecciona un perfil para optimizar tu sistema",
+  "runtime": "Entorno",
+  "permissions": "Permisos",
+  "permissionsAdmin": "Administrador",
+  "permissionsUser": "Usuario estandar",
+  "languageSelector": "Selector de idioma",
+  "activeProfile": "Perfil activo",
+  "activeBadge": "Activo",
+  "applying": "Aplicando perfil",
+  "messages": {
+    "browserInfo": "Modo navegador: la aplicacion muestra perfiles, pero solo puede aplicarlos dentro de la app de escritorio Tauri.",
+    "desktopStatusReady": "App desktop detectada. Puedes aplicar perfiles.",
+    "desktopStatusBlocked": "App desktop sin permisos suficientes.",
+    "adminRequired": "Ejecuta la aplicacion como administrador para aplicar perfiles.",
+    "applySuccess": "Perfil {{profileName}} aplicado correctamente.",
+    "profileNotFound": "No se encontro el perfil solicitado.",
+    "scriptExecutionFailed": "No se pudo ejecutar el script del perfil.",
+    "profileApplyFailed": "El perfil fallo durante su aplicacion.",
+    "loadError": "Error al cargar perfiles: {{details}}",
+    "applyError": "Error: {{details}}"
+  }
+}
