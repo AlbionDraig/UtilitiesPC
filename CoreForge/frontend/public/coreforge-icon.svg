@@ -1,73 +1,79 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <defs>
 
-    <filter id="bloom" x="-60%" y="-60%" width="220%" height="220%" color-interpolation-filters="sRGB">
-      <feGaussianBlur in="SourceGraphic" stdDeviation="18" result="blurred"/>
+    <!-- Wide soft halo — gives presence on any background -->
+    <filter id="halo" x="-55%" y="-45%" width="210%" height="190%" color-interpolation-filters="sRGB">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="22"/>
+    </filter>
+
+    <!-- Inner bloom for the core highlight -->
+    <filter id="coreBloom" x="-45%" y="-45%" width="190%" height="190%" color-interpolation-filters="sRGB">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur"/>
       <feMerge>
-        <feMergeNode in="blurred"/>
+        <feMergeNode in="blur"/>
         <feMergeNode in="SourceGraphic"/>
       </feMerge>
     </filter>
 
-    <filter id="innerGlow" x="-50%" y="-50%" width="200%" height="200%" color-interpolation-filters="sRGB">
-      <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="blurred"/>
-      <feMerge>
-        <feMergeNode in="blurred"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
-    </filter>
-
-    <linearGradient id="flameGrad" x1="20%" y1="100%" x2="40%" y2="0%">
+    <!-- Main flame: deep rust base -> orange -> warm gold -> sandy white tip -->
+    <linearGradient id="flameGrad" x1="15%" y1="98%" x2="55%" y2="2%">
       <stop offset="0%"   stop-color="#6e1e06"/>
-      <stop offset="22%"  stop-color="#b83e12"/>
-      <stop offset="50%"  stop-color="#d4622a"/>
-      <stop offset="76%"  stop-color="#d4a855"/>
+      <stop offset="20%"  stop-color="#b83e12"/>
+      <stop offset="48%"  stop-color="#d4622a"/>
+      <stop offset="74%"  stop-color="#d4a855"/>
       <stop offset="100%" stop-color="#f0ddb0"/>
     </linearGradient>
 
-    <linearGradient id="highlightGrad" x1="30%" y1="100%" x2="50%" y2="0%">
+    <!-- Inner core: lighter, hotter center of the flame -->
+    <linearGradient id="coreGrad" x1="25%" y1="95%" x2="55%" y2="5%">
       <stop offset="0%"   stop-color="#d4622a" stop-opacity="0"/>
-      <stop offset="35%"  stop-color="#e08840" stop-opacity="0.7"/>
-      <stop offset="75%"  stop-color="#f0ddb0" stop-opacity="0.85"/>
-      <stop offset="100%" stop-color="#faf3e8"  stop-opacity="0.60"/>
+      <stop offset="30%"  stop-color="#e08840" stop-opacity="0.72"/>
+      <stop offset="72%"  stop-color="#f0ddb0" stop-opacity="0.88"/>
+      <stop offset="100%" stop-color="#faf3e8"  stop-opacity="0.65"/>
     </linearGradient>
-
-    <radialGradient id="bgGrad" cx="50%" cy="38%" r="58%">
-      <stop offset="0%"   stop-color="#0e2624"/>
-      <stop offset="100%" stop-color="#040d0c"/>
-    </radialGradient>
-
-    <radialGradient id="haze" cx="50%" cy="62%" r="44%">
-      <stop offset="0%"   stop-color="#c04515" stop-opacity="0.22"/>
-      <stop offset="100%" stop-color="#c04515" stop-opacity="0"/>
-    </radialGradient>
 
   </defs>
 
-  <rect width="512" height="512" rx="88" fill="url(#bgGrad)"/>
+  <!--
+    The flame shape:
+      Tip  : (255, 78)  — slightly left of center, organic feel
+      Belly: widens to ~168 px at y≈268 (below mid-height)
+      Base : rounds gently to (256, 406)
+      Slight rightward expansion on the descending side gives
+      a natural leaning-flame look, not a rigid teardrop.
+  -->
 
-  <ellipse cx="256" cy="310" rx="140" ry="150" fill="url(#haze)"/>
-
+  <!-- Outer warm halo (very soft, low opacity) -->
   <path
-    d="M 258 142
-       C 295 166, 342 218, 338 276
-       C 334 326, 312 358, 256 366
-       C 200 358, 178 326, 174 276
-       C 170 218, 220 166, 258 142
-       Z"
-    fill="url(#flameGrad)"
-    filter="url(#bloom)"/>
+    d="M 255 78
+       C 318 112, 355 195, 345 268
+       C 338 318, 312 366, 256 402
+       C 200 366, 174 316, 168 266
+       C 160 192, 196 110, 255 78 Z"
+    fill="#c04515" opacity="0.30"
+    filter="url(#halo)"/>
 
+  <!-- Main flame body -->
   <path
-    d="M 258 192
-       C 278 212, 308 248, 308 284
-       C 308 314, 292 342, 256 348
-       C 222 342, 208 314, 210 284
-       C 212 250, 238 212, 258 192
-       Z"
-    fill="url(#highlightGrad)"
-    filter="url(#innerGlow)"/>
+    d="M 255 78
+       C 318 112, 355 195, 345 268
+       C 338 318, 312 366, 256 402
+       C 200 366, 174 316, 168 266
+       C 160 192, 196 110, 255 78 Z"
+    fill="url(#flameGrad)"/>
 
-  <circle cx="257" cy="145" r="7" fill="#f8eed4" opacity="0.65" filter="url(#innerGlow)"/>
+  <!-- Inner core highlight -->
+  <path
+    d="M 255 148
+       C 294 172, 318 220, 314 272
+       C 310 310, 290 342, 255 356
+       C 220 342, 202 310, 200 272
+       C 198 222, 220 172, 255 148 Z"
+    fill="url(#coreGrad)"
+    filter="url(#coreBloom)"/>
+
+  <!-- Tip spark -->
+  <circle cx="255" cy="81" r="8" fill="#f8eed4" opacity="0.60"
+    filter="url(#coreBloom)"/>
 
 </svg>
