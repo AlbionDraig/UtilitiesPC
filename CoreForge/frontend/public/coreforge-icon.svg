@@ -1,67 +1,75 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <defs>
 
-    <!-- Neon cyan glow for chip outline -->
-    <filter id="cyanGlow" x="-35%" y="-35%" width="170%" height="170%" color-interpolation-filters="sRGB">
-      <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur"/>
+    <!-- Teal glow for chip outline -->
+    <filter id="tealGlow" x="-40%" y="-40%" width="180%" height="180%" color-interpolation-filters="sRGB">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur"/>
       <feMerge>
         <feMergeNode in="blur"/>
         <feMergeNode in="SourceGraphic"/>
       </feMerge>
     </filter>
 
-    <!-- Warm glow for flame -->
-    <filter id="warmGlow" x="-50%" y="-50%" width="200%" height="200%" color-interpolation-filters="sRGB">
-      <feGaussianBlur in="SourceGraphic" stdDeviation="9" result="blur"/>
+    <!-- Warm forge glow for flame -->
+    <filter id="forgeGlow" x="-55%" y="-55%" width="210%" height="210%" color-interpolation-filters="sRGB">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur"/>
       <feMerge>
         <feMergeNode in="blur"/>
         <feMergeNode in="SourceGraphic"/>
       </feMerge>
     </filter>
 
-    <!-- Soft glow for corner accents -->
-    <filter id="dimGlow" x="-60%" y="-60%" width="220%" height="220%" color-interpolation-filters="sRGB">
-      <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur"/>
+    <!-- Subtle glow for brackets -->
+    <filter id="softGlow" x="-70%" y="-70%" width="240%" height="240%" color-interpolation-filters="sRGB">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3.5" result="blur"/>
       <feMerge>
         <feMergeNode in="blur"/>
         <feMergeNode in="SourceGraphic"/>
       </feMerge>
     </filter>
 
-    <!-- Forge fire gradient: hot base → golden mid → bright tip -->
+    <!-- Forge flame gradient: rust → orange → sandy-gold → warm white -->
     <linearGradient id="flameGrad" x1="0%" y1="100%" x2="0%" y2="0%">
-      <stop offset="0%"   stop-color="#ff4500"/>
-      <stop offset="45%"  stop-color="#ffd700"/>
-      <stop offset="85%"  stop-color="#fff8e0"/>
-      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.95"/>
+      <stop offset="0%"   stop-color="#a83510"/>
+      <stop offset="30%"  stop-color="#d4622a"/>
+      <stop offset="65%"  stop-color="#d4a855"/>
+      <stop offset="88%"  stop-color="#f0ddb0"/>
+      <stop offset="100%" stop-color="#faf3e0" stop-opacity="0.95"/>
     </linearGradient>
 
-    <!-- White-hot core of flame -->
+    <!-- Bright sandy-white core -->
     <linearGradient id="flameCore" x1="0%" y1="100%" x2="0%" y2="0%">
-      <stop offset="0%"   stop-color="#ffaa00"/>
-      <stop offset="60%"  stop-color="#ffffff"/>
-      <stop offset="100%" stop-color="#ffffff"/>
+      <stop offset="0%"   stop-color="#d4622a"/>
+      <stop offset="50%"  stop-color="#f0ddb0"/>
+      <stop offset="100%" stop-color="#faf3e0"/>
     </linearGradient>
 
-    <!-- Radial ambient glow behind flame -->
-    <radialGradient id="forgeAmbient" cx="50%" cy="68%" r="42%">
-      <stop offset="0%"   stop-color="#ff5500" stop-opacity="0.28"/>
-      <stop offset="100%" stop-color="#ff5500" stop-opacity="0"/>
+    <!-- Radial ambient warm glow behind flame -->
+    <radialGradient id="forgeAmbient" cx="50%" cy="66%" r="40%">
+      <stop offset="0%"   stop-color="#d4622a" stop-opacity="0.30"/>
+      <stop offset="100%" stop-color="#a83510" stop-opacity="0"/>
     </radialGradient>
 
-    <!-- Background -->
-    <radialGradient id="bgGrad" cx="50%" cy="42%" r="58%">
-      <stop offset="0%"   stop-color="#0c1620"/>
-      <stop offset="100%" stop-color="#04080f"/>
+    <!-- Background: deep teal-black, lighter teal center -->
+    <radialGradient id="bgGrad" cx="50%" cy="42%" r="56%">
+      <stop offset="0%"   stop-color="#112524"/>
+      <stop offset="100%" stop-color="#040e0e"/>
+    </radialGradient>
+
+    <!-- Subtle wave overlay (echoes wallpaper) -->
+    <radialGradient id="waveTint" cx="80%" cy="30%" r="65%">
+      <stop offset="0%"   stop-color="#1e4a46" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#1e4a46" stop-opacity="0"/>
     </radialGradient>
 
   </defs>
 
   <!-- ═══ BACKGROUND ═══ -->
   <rect width="512" height="512" fill="url(#bgGrad)" rx="72"/>
+  <rect width="512" height="512" fill="url(#waveTint)" rx="72"/>
 
-  <!-- Subtle grid lines -->
-  <g stroke="#00f5ff" stroke-width="0.8" opacity="0.05">
+  <!-- Subtle teal grid lines -->
+  <g stroke="#2d6658" stroke-width="0.8" opacity="0.12">
     <line x1="0"   y1="128" x2="512" y2="128"/>
     <line x1="0"   y1="256" x2="512" y2="256"/>
     <line x1="0"   y1="384" x2="512" y2="384"/>
@@ -70,39 +78,35 @@
     <line x1="384" y1="0"   x2="384" y2="512"/>
   </g>
 
-  <!-- ═══ CORNER BRACKETS ═══ -->
-  <g stroke="#00f5ff" stroke-width="4" fill="none" stroke-linecap="square" filter="url(#dimGlow)" opacity="0.75">
+  <!-- ═══ CORNER BRACKETS (sandy-warm accent) ═══ -->
+  <g stroke="#c49a6a" stroke-width="4.5" fill="none" stroke-linecap="square" filter="url(#softGlow)" opacity="0.80">
     <polyline points="36,80 36,36 80,36"/>
     <polyline points="432,36 476,36 476,80"/>
     <polyline points="36,432 36,476 80,476"/>
     <polyline points="476,432 476,476 432,476"/>
   </g>
 
-  <!-- ═══ FORGE AMBIENT LIGHT (warm glow behind chip) ═══ -->
-  <ellipse cx="256" cy="284" rx="128" ry="116" fill="url(#forgeAmbient)"/>
+  <!-- ═══ FORGE AMBIENT LIGHT ═══ -->
+  <ellipse cx="256" cy="290" rx="122" ry="110" fill="url(#forgeAmbient)"/>
 
-  <!-- ═══ CIRCUIT PINS (16 total, 4 per side) ═══ -->
-  <!-- Pin dimensions: 10px wide, 42px long -->
-  <!-- Top pins  — from y=112 down to chip top at y=154 -->
-  <g fill="#00f5ff" filter="url(#cyanGlow)">
+  <!-- ═══ CIRCUIT PINS — teal color, 4 per side ═══ -->
+  <g fill="#2d7060" filter="url(#tealGlow)">
+    <!-- Top pins -->
     <rect x="192" y="112" width="10" height="42" rx="2"/>
     <rect x="227" y="112" width="10" height="42" rx="2"/>
     <rect x="275" y="112" width="10" height="42" rx="2"/>
     <rect x="310" y="112" width="10" height="42" rx="2"/>
-
-    <!-- Bottom pins — from chip bottom y=358 down to y=400 -->
+    <!-- Bottom pins -->
     <rect x="192" y="358" width="10" height="42" rx="2"/>
     <rect x="227" y="358" width="10" height="42" rx="2"/>
     <rect x="275" y="358" width="10" height="42" rx="2"/>
     <rect x="310" y="358" width="10" height="42" rx="2"/>
-
-    <!-- Left pins — from x=112 to chip left x=154 -->
+    <!-- Left pins -->
     <rect x="112" y="192" width="42" height="10" rx="2"/>
     <rect x="112" y="227" width="42" height="10" rx="2"/>
     <rect x="112" y="275" width="42" height="10" rx="2"/>
     <rect x="112" y="310" width="42" height="10" rx="2"/>
-
-    <!-- Right pins — from chip right x=358 to x=400 -->
+    <!-- Right pins -->
     <rect x="358" y="192" width="42" height="10" rx="2"/>
     <rect x="358" y="227" width="42" height="10" rx="2"/>
     <rect x="358" y="275" width="42" height="10" rx="2"/>
@@ -110,115 +114,84 @@
   </g>
 
   <!-- Pin tip dots -->
-  <g fill="#00f5ff" opacity="0.6">
-    <circle cx="197" cy="109" r="4.5"/>
-    <circle cx="232" cy="109" r="4.5"/>
-    <circle cx="280" cy="109" r="4.5"/>
-    <circle cx="315" cy="109" r="4.5"/>
-
-    <circle cx="197" cy="403" r="4.5"/>
-    <circle cx="232" cy="403" r="4.5"/>
-    <circle cx="280" cy="403" r="4.5"/>
-    <circle cx="315" cy="403" r="4.5"/>
-
-    <circle cx="109" cy="197" r="4.5"/>
-    <circle cx="109" cy="232" r="4.5"/>
-    <circle cx="109" cy="280" r="4.5"/>
-    <circle cx="109" cy="315" r="4.5"/>
-
-    <circle cx="403" cy="197" r="4.5"/>
-    <circle cx="403" cy="232" r="4.5"/>
-    <circle cx="403" cy="280" r="4.5"/>
-    <circle cx="403" cy="315" r="4.5"/>
+  <g fill="#2d7060" opacity="0.55">
+    <circle cx="197" cy="109" r="4.5"/>  <circle cx="232" cy="109" r="4.5"/>
+    <circle cx="280" cy="109" r="4.5"/>  <circle cx="315" cy="109" r="4.5"/>
+    <circle cx="197" cy="403" r="4.5"/>  <circle cx="232" cy="403" r="4.5"/>
+    <circle cx="280" cy="403" r="4.5"/>  <circle cx="315" cy="403" r="4.5"/>
+    <circle cx="109" cy="197" r="4.5"/>  <circle cx="109" cy="232" r="4.5"/>
+    <circle cx="109" cy="280" r="4.5"/>  <circle cx="109" cy="315" r="4.5"/>
+    <circle cx="403" cy="197" r="4.5"/>  <circle cx="403" cy="232" r="4.5"/>
+    <circle cx="403" cy="280" r="4.5"/>  <circle cx="403" cy="315" r="4.5"/>
   </g>
 
-  <!-- ═══ CHIP BODY — chamfered square (8-point polygon) ═══ -->
+  <!-- ═══ CHIP BODY — chamfered square (22px chamfers) ═══ -->
   <!--
-    Square: (154,154)→(358,358) = 204×204 px, 22px chamfers
-    Vertices CW from top-left:
-      (176,154) (336,154)   ← top edge
-      (358,176) (358,336)   ← right edge
-      (336,358) (176,358)   ← bottom edge
-      (154,336) (154,176)   ← left edge
+    Bounding box: (154,154)→(358,358)
+    Vertices: (176,154) (336,154) (358,176) (358,336) (336,358) (176,358) (154,336) (154,176)
   -->
 
-  <!-- Outer halo (thick, very transparent) -->
+  <!-- Outer halo -->
   <polygon
     points="176,154 336,154 358,176 358,336 336,358 176,358 154,336 154,176"
-    fill="none"
-    stroke="#00f5ff"
-    stroke-width="10"
-    opacity="0.12"/>
+    fill="none" stroke="#2d7060" stroke-width="12" opacity="0.10"/>
 
-  <!-- Main chip body -->
+  <!-- Main chip body fill -->
   <polygon
     points="176,154 336,154 358,176 358,336 336,358 176,358 154,336 154,176"
-    fill="#060c17"
-    stroke="#00f5ff"
-    stroke-width="2.5"
-    filter="url(#cyanGlow)"/>
+    fill="#071c1a" stroke="#2d7060" stroke-width="2.5"
+    filter="url(#tealGlow)"/>
 
-  <!-- Secondary inner border -->
+  <!-- Inner frame -->
   <polygon
     points="186,164 326,164 348,186 348,326 326,348 186,348 164,326 164,186"
-    fill="none"
-    stroke="#00f5ff"
-    stroke-width="1"
-    opacity="0.22"/>
+    fill="none" stroke="#2d7060" stroke-width="1" opacity="0.25"/>
 
-  <!-- Very faint cross-hatch traces inside chip -->
-  <g stroke="#00f5ff" stroke-width="1" opacity="0.08">
+  <!-- Faint internal traces -->
+  <g stroke="#2d7060" stroke-width="1" opacity="0.10">
     <line x1="197" y1="154" x2="197" y2="358"/>
     <line x1="315" y1="154" x2="315" y2="358"/>
     <line x1="154" y1="197" x2="358" y2="197"/>
     <line x1="154" y1="315" x2="358" y2="315"/>
   </g>
 
-  <!-- Corner node dots on chip vertices -->
-  <g fill="#00f5ff" filter="url(#cyanGlow)" opacity="0.9">
-    <circle cx="176" cy="154" r="4"/>
-    <circle cx="336" cy="154" r="4"/>
-    <circle cx="358" cy="176" r="4"/>
-    <circle cx="358" cy="336" r="4"/>
-    <circle cx="336" cy="358" r="4"/>
-    <circle cx="176" cy="358" r="4"/>
-    <circle cx="154" cy="336" r="4"/>
-    <circle cx="154" cy="176" r="4"/>
+  <!-- Vertex node dots (teal) -->
+  <g fill="#2d7060" filter="url(#tealGlow)" opacity="0.85">
+    <circle cx="176" cy="154" r="4"/>  <circle cx="336" cy="154" r="4"/>
+    <circle cx="358" cy="176" r="4"/>  <circle cx="358" cy="336" r="4"/>
+    <circle cx="336" cy="358" r="4"/>  <circle cx="176" cy="358" r="4"/>
+    <circle cx="154" cy="336" r="4"/>  <circle cx="154" cy="176" r="4"/>
   </g>
 
-  <!-- ═══ FORGE FLAME (inside chip) ═══ -->
+  <!-- ═══ FORGE FLAME (angular geometric, inside chip) ═══ -->
   <!--
-    Angular, geometric flame — two "tongues" split at the top.
-    Centered at x=256.  Height: y=186 (tip) to y=322 (base) = 136px.
-    Base width: 206–306 = 100px.
-    Fork notch at y=248: outer=220,292  inner=236,276
+    Forked flame:  tip at (256,186), base at y=322 (width 206–306)
+    Fork notch at y=248: outer pts 220,292 — inner pts 236,276
   -->
 
-  <!-- Flame bloom (soft, behind) -->
+  <!-- Bloom layer (soft, behind flame) -->
   <polygon
     points="256,186 292,248 276,248 306,322 206,322 236,248 220,248"
-    fill="#ff5500"
-    opacity="0.35"
-    filter="url(#warmGlow)"/>
+    fill="#c04515" opacity="0.32"
+    filter="url(#forgeGlow)"/>
 
-  <!-- Main flame body -->
+  <!-- Main flame -->
   <polygon
     points="256,186 292,248 276,248 306,322 206,322 236,248 220,248"
     fill="url(#flameGrad)"
-    filter="url(#warmGlow)"/>
+    filter="url(#forgeGlow)"/>
 
-  <!-- Bright inner core of flame -->
+  <!-- Bright inner core -->
   <polygon
     points="256,218 272,256 265,256 280,306 232,306 247,256 240,256"
-    fill="url(#flameCore)"
-    opacity="0.72"/>
+    fill="url(#flameCore)" opacity="0.70"/>
 
-  <!-- Magenta accent lines on outer flame edges (cyberpunk detail) -->
-  <line x1="220" y1="248" x2="206" y2="322" stroke="#ff0090" stroke-width="2.5" opacity="0.65"/>
-  <line x1="292" y1="248" x2="306" y2="322" stroke="#ff0090" stroke-width="2.5" opacity="0.65"/>
+  <!-- Sandy accent lines on outer flame edges -->
+  <line x1="220" y1="248" x2="206" y2="322" stroke="#c49a6a" stroke-width="2.5" opacity="0.60"/>
+  <line x1="292" y1="248" x2="306" y2="322" stroke="#c49a6a" stroke-width="2.5" opacity="0.60"/>
 
-  <!-- Cyan accent at the very tip of flame (forge spark) -->
-  <line x1="252" y1="186" x2="260" y2="186" stroke="#00f5ff" stroke-width="3" opacity="0.8"/>
-  <circle cx="256" cy="183" r="3" fill="#00f5ff" opacity="0.7"/>
+  <!-- Sandy spark at flame tip -->
+  <circle cx="256" cy="183" r="4" fill="#f0ddb0" opacity="0.85" filter="url(#softGlow)"/>
+  <line x1="252" y1="186" x2="260" y2="186" stroke="#f0ddb0" stroke-width="2.5" opacity="0.70"/>
 
 </svg>
