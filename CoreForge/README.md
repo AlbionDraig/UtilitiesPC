@@ -1,90 +1,92 @@
-# Gestor de Perfiles PC
+# CoreForge
 
-Herramienta de escritorio Tauri para seleccionar y aplicar perfiles de sistema operativo optimizados para diferentes casos de uso.
+Aplicación de escritorio (Tauri + React) para aplicar perfiles de uso en Windows y automatizar ajustes del sistema según contexto.
 
 ## Características
 
-- 🎮 **Perfil Gamer** - Optimizado para juegos
-- 💼 **Perfil Trabajo** - Configuración productiva estándar
-- 🚀 **Perfil Gamer Agresivo** - Máximo rendimiento para gaming extremo
-- 🛠️ **Perfil Trabajo Dev** - Optimizado para desarrollo
+- 🎮 Perfil Gamer
+- 🚀 Perfil Gamer Agresivo
+- 💼 Perfil Trabajo
+- 🛠️ Perfil Trabajo Dev
+- ⚙️ Panel administrativo para reglas de apps (abrir/cerrar por perfil)
+- 🦀 Ejecución nativa en Rust (sin scripts externos para aplicar perfiles)
 
 ## Stack tecnológico
 
-- **Frontend**: React 19 + TypeScript + Vite
-- **Backend**: Tauri 2 + Rust
-- **Ejecución de perfiles**: Orquestación nativa en Rust (sin scripts externos)
+- Frontend: React 19 + TypeScript + Vite
+- Backend: Tauri 2 + Rust
+- CI: GitHub Actions
 
-## Requisitos previos
+## Documentación relacionada
 
-- Node.js 18+
-- Rust toolchain (para compilar Tauri)
-- Windows 10/11
+- README del repositorio: ../README.md
+- Contribución: ../CONTRIBUTING.md
+- Arquitectura: ../docs/ARCHITECTURE.md
+- Release y empaquetado: ../docs/RELEASE.md
 
-## Instalación y ejecución
+## Requisitos
 
-### Modo desarrollo
+- Node.js 20+
+- Rust toolchain
+- Windows 10/11 para uso de perfiles
 
-```bash
-# Instalar dependencias (desde frontend/)
-cd frontend && npm install
-
-# Ejecutar en modo desarrollo (desde backend/src-tauri/)
-cd backend/src-tauri && cargo tauri dev
-```
-
-### Build para producción
+## Desarrollo local
 
 ```bash
-# Desde frontend/
-cd frontend && npm run build
-# Desde backend/src-tauri/
-cd backend/src-tauri && cargo tauri build
+# 1) Instalar dependencias
+cd frontend
+npm install
+
+# 2) Ejecutar app de escritorio en modo dev
+npm run tauri:dev
 ```
 
-## Cómo funciona
+## Build de producción
 
-1. La interfaz gráfica muestra 4 perfiles disponibles
-2. Al seleccionar un perfil, el backend Rust ejecuta operaciones nativas de Windows
-3. El backend automatiza tareas como:
-   - Cerrar procesos innecesarios
-   - Optimizar recursos del sistema
-   - Configurar ajustes específicos del perfil
+```bash
+# 1) Build frontend
+cd frontend
+npm run build
+
+# 2) Build instaladores Tauri (NSIS/MSI)
+npm run tauri:build
+```
 
 ## Estructura del proyecto
 
-```
-PerfilesPC/
-├── src/                      # Frontend React
-│   ├── App.tsx              # Componente principal
-│   ├── App.css              # Estilos
-│   └── main.tsx             # Punto de entrada
-├── src-tauri/               # Backend Rust
+```text
+CoreForge/
+├── frontend/                 # React + TypeScript
 │   ├── src/
-│   │   ├── lib.rs           # Comandos Tauri
-│   │   └── main.rs          # Punto de entrada
-│   └── Cargo.toml
-└── package.json
+│   ├── public/
+│   └── package.json
+└── backend/
+   └── src-tauri/            # Tauri + Rust
+      ├── src/
+      │   ├── commands/
+      │   ├── services/
+      │   └── models.rs
+      └── tauri.conf.json
 ```
 
-## Desarrollo
+## Permisos y comportamiento
 
-### Flujo de desarrollo
+- La app ya no bloquea globalmente la aplicación de perfiles por no tener permisos de administrador.
+- El estado de administrador se muestra como información de runtime.
+- Algunas operaciones del sistema pueden seguir requiriendo elevación según la política del equipo o del sistema operativo.
 
-1. Editar `src/App.tsx` para cambios en UI
-2. Editar `src-tauri/src/lib.rs` para comandos del backend
-3. Los cambios se reflejan inmediatamente en modo dev
+## Iconos
 
-### Agregar un nuevo perfil
+Para regenerar iconos de Windows y limpiar assets no-Windows:
 
-1. Agregar entrada en catálogo de perfiles backend
-2. Implementar la lógica del nuevo perfil en el servicio de perfiles de Rust
-3. La UI se actualiza automáticamente
+```bash
+cd frontend
+npm run tauri:icon:windows
+```
 
-## Troubleshooting
+## CI/CD
 
-### Error al aplicar perfiles
-Verifica que la app se ejecuta como administrador en Windows.
+- El workflow principal se ejecuta en push a ramas de desarrollo/producción para evitar ejecuciones duplicadas por push + pull_request.
 
 ## Licencia
 
