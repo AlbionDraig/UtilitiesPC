@@ -107,12 +107,13 @@ fn is_running_as_admin() -> bool {
 
 pub fn get_app_status() -> AppStatus {
     let is_admin = is_running_as_admin();
+    let can_apply_profiles = cfg!(target_os = "windows");
 
     AppStatus {
         platform: std::env::consts::OS.to_string(),
         is_admin,
-        can_apply_profiles: is_admin,
-        reason: if is_admin {
+        can_apply_profiles,
+        reason: if can_apply_profiles {
             None
         } else {
             Some(AppError::AdminRequired.code().to_string())
@@ -125,11 +126,6 @@ pub fn get_profiles() -> Vec<Profile> {
 }
 
 pub fn apply_profile(_app: &tauri::AppHandle, profile_id: &str) -> Result<String, AppError> {
-    let status = get_app_status();
-    if !status.can_apply_profiles {
-        return Err(AppError::AdminRequired);
-    }
-
     let profiles = get_profiles();
     let profile = profiles
         .iter()
