@@ -1,13 +1,10 @@
 name: coreforge-quality
 
 on:
-  pull_request:
-    paths:
-      - 'CoreForge/**'
-      - '.github/workflows/coreforge-quality.yml'
   push:
     branches:
       - main
+      - master
       - develop
     paths:
       - 'CoreForge/**'
