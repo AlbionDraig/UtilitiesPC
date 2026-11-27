@@ -90,4 +90,4 @@ npm run tauri:icon:windows
 
 ## Licencia
 
-MIT
+MIT. Ver [LICENSE](../LICENSE).
