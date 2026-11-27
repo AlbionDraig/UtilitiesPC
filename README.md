@@ -55,4 +55,4 @@ npm run tauri:dev
 
 ## Licencia
 
-MIT
+MIT. Ver [LICENSE](LICENSE).
